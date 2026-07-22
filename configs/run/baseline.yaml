@@ -1,0 +1,35 @@
+# A complete run: every flag `pysolarsim simulate` accepts, in one file.
+#
+#   pysolarsim simulate --config configs/run/baseline.yaml
+#
+# Command-line flags override anything set here, so this file holds the stable
+# parts of an experiment and the flags hold what you are varying.
+
+# Input #2: the illumination environment.
+scene: configs/scene/baseline_circular_6000K_40klx.yaml
+
+# Input #1: how to read the motion capture.
+mocap: configs/mocap/leap_csv.yaml
+
+# Recordings to simulate. A directory is searched recursively, so participant
+# subfolders are picked up and mirrored into the output tree.
+input: data/baseline_15participants/real
+pattern: "*.csv"
+
+output: data/baseline_15participants/simulated_v2
+power_column: P_sim_uW
+
+report: results/fidelity/baseline.csv
+
+calibration:
+  # Fit kappa once for this environment and reuse it everywhere, per the
+  # paper's protocol. Set mode to `per_recording` to refit on every file, or
+  # `fixed` to take kappa straight from the scene.
+  mode: reference
+  method: auto
+  # Paired motion-PV recordings to fit against. Omit to fit across the whole
+  # input set instead.
+  references:
+    - data/baseline_15participants/real/P01/Free Move__Synchronized.csv
+  reference:
+    max_seconds: 60

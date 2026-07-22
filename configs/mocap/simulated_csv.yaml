@@ -1,0 +1,31 @@
+# Reading back recordings that SolarSim itself produced.
+#
+# `pysolarsim simulate` writes every non-power column through unchanged and
+# adds a single simulated power column in microwatts. This config consumes
+# that output, so simulated data can be fed to downstream training code with
+# the same adapter machinery as real data.
+
+name: simulated_csv
+
+columns:
+  time: time
+  position: [leap_palm_x, leap_palm_y, leap_palm_z]
+  normal: [leap_palm_normal_x, leap_palm_normal_y, leap_palm_normal_z]
+
+units:
+  position: mm
+  time: s
+
+normal_convention: negate
+
+sample_rate_hz: 100
+
+dropout:
+  drop_zero_position: true
+  drop_na: true
+
+power:
+  mode: column
+  columns:
+    power: P_sim_uW
+  units: uw

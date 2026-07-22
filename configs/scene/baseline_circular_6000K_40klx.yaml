@@ -1,0 +1,20 @@
+name: baseline_circular_6000K_40klx
+units: mm
+meta: {table1: Circ. 6K/40, cct_k: 6000, illuminance_klx: 40, participants: 15, note: SolarTrack
+    15-participant baseline. No layout note was recorded; the geometry was carried
+    in the original simulation scripts., data_dir: baseline_circular_6000K_40klx}
+emitters:
+- id: overhead_disc
+  shape: disc
+  position: [-159.81, 868.82, 168.23]
+  normal: [0.0, -1.0, 0.0]
+  dimensions: {diameter: 200.0}
+  kappa: null
+  enabled: true
+integration:
+  disc: {n_r: 20, n_phi: 20}
+  rectangular: {n_u: 20, n_v: 20}
+calibration:
+  method: auto
+  mode: reference
+  reference: {max_seconds: 60}

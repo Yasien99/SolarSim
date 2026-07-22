@@ -1,0 +1,41 @@
+# Input #1: how to read motion capture out of a recording.
+#
+# This describes the SolarTrack acquisition format: a Leap Motion controller
+# sampled at 100 Hz, synchronised with the energy-harvesting board's PV
+# measurements in the same CSV.
+#
+# To support a different capture system, copy this file and change the column
+# names, units, and normal convention. Nothing in the simulator changes.
+
+name: leap_csv
+
+columns:
+  time: time
+  position: [leap_palm_x, leap_palm_y, leap_palm_z]
+  normal: [leap_palm_normal_x, leap_palm_normal_y, leap_palm_normal_z]
+
+units:
+  position: mm
+  time: s
+
+# Leap reports the palm normal, which points out of the palm. The cell is
+# mounted on the back of the wrist facing the other way, so n_c = -palm_normal.
+# Use `as_is` when your capture system already gives the outward cell normal.
+normal_convention: negate
+
+sample_rate_hz: 100
+
+dropout:
+  # A frame with no hand in view is reported at the origin; that is dropout,
+  # not a cell sitting at (0, 0, 0).
+  drop_zero_position: true
+  drop_na: true
+
+# Measured PV power, used only to fit kappa and to score fidelity.
+# Delete this block to synthesise from trajectories alone.
+power:
+  mode: v_times_i
+  columns:
+    voltage: v_dc
+    current: i_dc
+  units: w

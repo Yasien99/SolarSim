@@ -1,0 +1,20 @@
+name: geometry_rectangular_6000K_40klx
+units: mm
+meta: {source_layout: data\geometry_rectangular_6000K_40klx\light_sources.txt, table1: Rect.
+    6K/40, cct_k: 6000, illuminance_klx: 40, note: The layout note omits Rec_width/Rec_height;
+    the same physical 30x330 mm lamp is recorded in the multi-emitter notes., data_dir: geometry_rectangular_6000K_40klx}
+emitters:
+- id: rectangular_position_right
+  shape: rectangular
+  position: [-381.78, 921.12, 84.74]
+  normal: [0.0, -1.0, 0.0]
+  dimensions: {width: 30.0, height: 330.0}
+  kappa: null
+  enabled: true
+integration:
+  disc: {n_r: 20, n_phi: 20}
+  rectangular: {n_u: 20, n_v: 20}
+calibration:
+  method: auto
+  mode: reference
+  reference: {max_seconds: 60}

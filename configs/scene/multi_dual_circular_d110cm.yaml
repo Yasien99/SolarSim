@@ -1,0 +1,26 @@
+name: multi_dual_circular_d110cm
+units: mm
+meta: {source_layout: data\multi_dual_circular_d110cm\light_sources.txt, table1: Dual
+    Circ. d=110cm, cct_k: 6000, illuminance_klx: 40, data_dir: multi_dual_circular_d110cm}
+emitters:
+- id: disc_left
+  shape: disc
+  position: [-417.26, 820.25, 269.08]
+  normal: [0.0, -1.0, 0.0]
+  dimensions: {diameter: 285.0}
+  kappa: null
+  enabled: true
+- id: disc_right
+  shape: disc
+  position: [517.97, 746.35, -119.2]
+  normal: [0.0, -1.0, 0.0]
+  dimensions: {diameter: 190.0}
+  kappa: null
+  enabled: true
+integration:
+  disc: {n_r: 20, n_phi: 20}
+  rectangular: {n_u: 20, n_v: 20}
+calibration:
+  method: auto
+  mode: reference
+  reference: {max_seconds: 60}

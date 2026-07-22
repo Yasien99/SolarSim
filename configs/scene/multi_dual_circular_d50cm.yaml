@@ -1,0 +1,26 @@
+name: multi_dual_circular_d50cm
+units: mm
+meta: {source_layout: data\multi_dual_circular_d50cm\light_sources.txt, table1: Dual
+    Circ. d=50cm, cct_k: 6000, illuminance_klx: 40, data_dir: multi_dual_circular_d50cm}
+emitters:
+- id: disc_left
+  shape: disc
+  position: [-143.26, 823.33, 176.53]
+  normal: [0.0, -1.0, 0.0]
+  dimensions: {diameter: 290.0}
+  kappa: null
+  enabled: true
+- id: disc_right
+  shape: disc
+  position: [282.13, 724.68, -151.73]
+  normal: [0.0, -1.0, 0.0]
+  dimensions: {diameter: 145.0}
+  kappa: null
+  enabled: true
+integration:
+  disc: {n_r: 20, n_phi: 20}
+  rectangular: {n_u: 20, n_v: 20}
+calibration:
+  method: auto
+  mode: reference
+  reference: {max_seconds: 60}

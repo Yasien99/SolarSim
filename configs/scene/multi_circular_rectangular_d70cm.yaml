@@ -1,0 +1,26 @@
+name: multi_circular_rectangular_d70cm
+units: mm
+meta: {source_layout: data\multi_circular_rectangular_d70cm\light_sources.txt, table1: Circ.+Rect.
+    d=70cm, cct_k: 6000, illuminance_klx: 40, data_dir: multi_circular_rectangular_d70cm}
+emitters:
+- id: rectangular_position_left
+  shape: rectangular
+  position: [337.96, 809.95, 84.74]
+  normal: [0.0, -1.0, 0.0]
+  dimensions: {width: 30.0, height: 330.0}
+  kappa: null
+  enabled: true
+- id: disc_position_right
+  shape: disc
+  position: [-400.82, 883.19, 171.99]
+  normal: [0.0, -1.0, 0.0]
+  dimensions: {diameter: 290.0}
+  kappa: null
+  enabled: true
+integration:
+  disc: {n_r: 20, n_phi: 20}
+  rectangular: {n_u: 20, n_v: 20}
+calibration:
+  method: auto
+  mode: reference
+  reference: {max_seconds: 60}

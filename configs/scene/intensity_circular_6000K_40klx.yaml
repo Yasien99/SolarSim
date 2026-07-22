@@ -1,0 +1,19 @@
+name: intensity_circular_6000K_40klx
+units: mm
+meta: {source_layout: data\intensity_circular_6000K_40klx\light_sources.txt, table1: Circ.
+    6K/40 (sweep), cct_k: 6000, illuminance_klx: 40, data_dir: intensity_circular_6000K_40klx}
+emitters:
+- id: disc_left
+  shape: disc
+  position: [-27.0, 850.0, 118.0]
+  normal: [0.0, -1.0, 0.0]
+  dimensions: {diameter: 300.0}
+  kappa: null
+  enabled: true
+integration:
+  disc: {n_r: 20, n_phi: 20}
+  rectangular: {n_u: 20, n_v: 20}
+calibration:
+  method: auto
+  mode: reference
+  reference: {max_seconds: 60}
