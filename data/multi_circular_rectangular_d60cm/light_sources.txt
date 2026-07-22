@@ -1,0 +1,6 @@
+  {"Disk position left": [-143.26, 823.33, 176.53], 
+  {"Rectangle position right": [446.45, 891.72, 48.38  ]
+
+D1 = 290 
+Rec_width = 30
+Rec_height = 330
