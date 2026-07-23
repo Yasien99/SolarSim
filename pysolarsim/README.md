@@ -147,13 +147,6 @@ recordings consumes simulated ones unchanged.
 | `cli.py` | Command-line interface |
 | `convert.py` | Migrating recorded layout notes into scene files |
 
-## Relationship to `solarsim/`
-
-The original `solarsim/` package produced the published results and is
-untouched. `pysolarsim/` is a clean reimplementation of the same physics with
-configuration lifted out of the code. `tools/verify_against_reference.py`
-checks the two agree; view factors match to ~1e-13 relative error across
-every geometry, including tilted emitters.
 
 ## Tests
 
