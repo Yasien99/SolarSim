@@ -59,15 +59,6 @@ All recordings are sampled at 100 Hz with `time` in seconds.
 | `leap_palm_orientation_x/y/z` | Palm orientation |
 | `acc_x/y/z` or `xsen_acc_*`, `xsen_gyr_*`, `xsen_euler_*` | IMU, unused by SolarSim |
 
-A frame with no hand in view is reported at the origin `(0, 0, 0)`; those rows
-are tracker dropout and are excluded by the loader, not treated as a cell
-sitting at the origin.
-
-### Removed columns
-
-The `v_ac` and `i_ac` columns were dropped from all recordings. They carried
-the AC component from the kinetic harvester, which is unrelated to the
-photovoltaic signal SolarSim models and was not used by any analysis.
 
 ## Distribution
 
