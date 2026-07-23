@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarSim &mdash; Interactive Radiometric Simulator</title>
+    <link rel="icon" type="image/svg+xml" href="/SolarSim/assets/icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module" crossorigin src="/SolarSim/assets/simulator-DTOPr3Ae.js"></script>
+  <link rel="modulepreload" crossorigin href="/SolarSim/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="stylesheet" crossorigin href="/SolarSim/assets/simulator-DWGBMrgC.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="title-row">
+                    <img src="/SolarSim/assets/icon.svg" alt="SolarSim" class="header-icon">
+                    <h1>SolarSim Simulator</h1>
+                </div>
+                <a href="../" class="back-to-paper" title="Back to the paper site"><i class="fas fa-arrow-left"></i><span>Paper</span></a>
+                <div class="header-icons">
+                    <a href="../help.html" class="header-icon-btn" target="_blank" title="Help & Documentation">
+                        <i class="fas fa-question-circle"></i>
+                    </a>
+                    <a href="https://github.com/Yasien99/SolarSim" class="header-icon-btn" target="_blank" title="GitHub Repository">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="header-icon-btn" id="paper-btn" title="Paper (Coming Soon)">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main container -->
+        <div class="container">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="control-section">
+                    <h3>
+                        Controls
+                        <button id="settings-btn" class="settings-icon-btn" title="Advanced Settings">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </h3>
+                    
+                    <div class="control-group">
+                        <label for="trajectory-select">Trajectory:</label>
+                        <select id="trajectory-select">
+                            <option value="Circle">Circle</option>
+                            <option value="One">One</option>
+                            <option value="Two">Two</option>
+                            <option value="Three">Three</option>
+                            <option value="Triangle">Triangle</option>
+                            <option value="Custom">Custom (Draw Your Own)</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group csv-upload-group">
+                        <label>Upload Motion Data:</label>
+                        <button id="upload-csv-btn" class="btn btn-upload">
+                            <i class="fas fa-file-csv"></i> Upload Motion Capture
+                        </button>
+                        <input type="file" id="csv-input" accept=".csv" style="display: none;">
+                        <div id="upload-progress-container" class="progress-container" style="display: none;">
+                            <div id="upload-progress-bar" class="upload-progress-bar"></div>
+                            <span id="upload-progress-text" class="upload-progress-text">0%</span>
+                        </div>
+                        <div id="upload-status" class="status-message" style="display: none;"></div>
+                        <div class="upload-notice">
+                            ℹ️ Your CSV file is processed entirely in your browser. No data is uploaded to our servers.
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>
+                            Radiometric Model: 
+                            <span class="info-icon" data-tooltip="model-info">ⓘ</span>
+                        </label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="model" value="oriented" id="model-oriented" checked>
+                                <span>Orientation Aware</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="model" value="parallel" id="model-parallel">
+                                <span>Parallel Disk</span>
+                            </label>
+                        </div>
+                        
+                        <!-- Tooltip -->
+                        <div id="model-info-tooltip" class="tooltip-content" style="display: none;">
+                            <strong>Orientation Aware:</strong> Accounts for hand orientation using Lambert's cosine law. Power depends on the angle between the cell normal and light direction (P ∝ cos θ).
+                            <br><br>
+                            <strong>Parallel Disk:</strong> Simplified model assuming the palm normal always points upward, ignoring orientation effects.
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Animation:</label>
+                        <div class="button-group">
+                            <button id="play-btn" class="btn btn-primary">▶ Play</button>
+                            <button id="pause-btn" class="btn btn-secondary" disabled>⏸ Pause</button>
+                            <button id="reset-btn" class="btn btn-secondary">⏮ Reset</button>
+                        </div>
+                        <div class="slider-group">
+                            <label>Speed: <input type="number" id="speed-value" value="1.0" min="0.5" max="3" step="0.5" class="slider-num-input">x</label>
+                            <input type="range" id="speed" min="0.5" max="3" value="1" step="0.5">
+                        </div>
+                        <div class="progress-container">
+                            <div id="progress-bar" class="progress-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization Area -->
+            <div class="viz-container">
+                <!-- 3D Scene and Equation Box Row -->
+                <div class="top-row">
+                    <!-- 3D Scene with state overlay -->
+                    <div class="scene-wrapper">
+                        <div id="scene-container" class="scene-container"></div>
+                        
+                        <!-- Mobile-only floating controls -->
+                        <div class="mobile-controls">
+                            <!-- Top-left: Trajectory selector -->
+                            <div class="mobile-control mobile-trajectory">
+                                <select id="mobile-trajectory-select">
+                                    <option value="Circle">Circle</option>
+                                    <option value="One">One</option>
+                                    <option value="Two">Two</option>
+                                    <option value="Three">Three</option>
+                                    <option value="Triangle">Triangle</option>
+                                    <option value="Custom">Custom</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Top-right: Model selector -->
+                            <div class="mobile-control mobile-model">
+                                <button class="model-btn active" data-model="oriented" title="Orientation Aware">📐</button>
+                                <button class="model-btn" data-model="parallel" title="Parallel Disk">⊥</button>
+                            </div>
+                            
+                            <!-- Bottom-center: Animation controls -->
+                            <div class="mobile-control mobile-animation">
+                                <button class="anim-btn" id="mobile-play-btn" title="Play">▶</button>
+                                <button class="anim-btn" id="mobile-pause-btn" title="Pause" disabled>⏸</button>
+                                <button class="anim-btn" id="mobile-reset-btn" title="Reset">⏮</button>
+                            </div>
+                            
+                            <!-- Light position arrows -->
+                            <div class="mobile-control mobile-light-arrows">
+                                <div class="arrow-group">
+                                    <button class="arrow-btn arrow-up" data-axis="y" data-dir="1" title="Move Light Up">↑</button>
+                                    <div class="arrow-row">
+                                        <button class="arrow-btn arrow-left" data-axis="x" data-dir="-1" title="Move Light Left">←</button>
+                                        <div class="arrow-center">💡</div>
+                                        <button class="arrow-btn arrow-right" data-axis="x" data-dir="1" title="Move Light Right">→</button>
+                                    </div>
+                                    <button class="arrow-btn arrow-down" data-axis="y" data-dir="-1" title="Move Light Down">↓</button>
+                                </div>
+                                <div class="arrow-z">
+                                    <button class="arrow-btn arrow-forward" data-axis="z" data-dir="1" title="Move Light Forward">▲</button>
+                                    <button class="arrow-btn arrow-back" data-axis="z" data-dir="-1" title="Move Light Back">▼</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Drawing Canvas Overlay (hidden by default) -->
+                        <div id="drawing-overlay" class="drawing-overlay" style="display: none;">
+                            <div class="drawing-instructions">
+                                <h3>Draw Your Trajectory</h3>
+                                <p>Click and drag to draw a path with your mouse</p>
+                                <p class="drawing-hint">💡 Tip: Draw upward ↑ to approach the light</p>
+                            </div>
+                            <canvas id="drawing-canvas"></canvas>
+                            <div class="drawing-controls">
+                                <button id="drawing-done-btn" class="btn btn-primary">✓ Done</button>
+                                <button id="drawing-clear-btn" class="btn btn-secondary">↻ Clear</button>
+                                <button id="drawing-cancel-btn" class="btn btn-secondary">✕ Cancel</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Current State Display (overlay on 3D scene) -->
+                        <div class="state-display-overlay">
+                            <h3>
+                                Current State
+                                <span class="info-icon" data-tooltip="current-state">ⓘ</span>
+                            </h3>
+                            <div class="state-values">
+                                <div class="state-item">
+                                    <span class="state-label">a =</span>
+                                    <span id="state-a" class="state-value">0.0</span>
+                                    <span class="state-unit">mm</span>
+                                </div>
+                                <div class="state-item">
+                                    <span class="state-label">H =</span>
+                                    <span id="state-h" class="state-value">0.0</span>
+                                    <span class="state-unit">mm</span>
+                                </div>
+                                <div class="state-item" id="theta-state-item">
+                                    <span class="state-label">θ =</span>
+                                    <span id="state-theta" class="state-value">0.0</span>
+                                    <span class="state-unit">°</span>
+                                </div>
+                                <div class="state-item">
+                                    <span class="state-label">Power =</span>
+                                    <span id="state-power" class="state-value">0.0</span>
+                                    <span class="state-unit">μW</span>
+                                </div>
+                                <div class="state-item" id="kappa-state-item" style="display: none;">
+                                    <span class="state-label">κ =</span>
+                                    <span id="state-kappa" class="state-value">0.0</span>
+                                    <button id="kappa-edit-btn" class="kappa-edit-btn" title="Configure κ">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Tooltip -->
+                            <div id="current-state-tooltip" class="tooltip-content" style="display: none;">
+                                <strong>a:</strong> Lateral offset - horizontal distance between hand and light source in the XZ plane (mm).
+                                <br><br>
+                                <strong>H:</strong> Height - vertical separation between hand and light source (mm).
+                                <br><br>
+                                <strong>θ:</strong> Incidence angle - angle between the solar cell normal and the light direction vector (degrees). Smaller angles mean more direct light.
+                                <br><br>
+                                <strong>Power:</strong> Current simulated power received by the solar cell (μW).
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Emitter Management Panel -->
+                    <div class="emitter-panel" id="emitter-panel">
+                        <div class="emitter-panel-header">
+                            <h3>Emitters</h3>
+                            <button id="add-emitter-btn" class="btn-add-emitter" title="Add Emitter (max 4)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div id="emitter-list" class="emitter-list">
+                            <!-- Emitter rows are rendered dynamically by main.js -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Power Chart (with toggle to open workspace map) -->
+                <div class="chart-container" id="chart-container">
+                    <div class="view-toggle">
+                        <button id="view-chart-btn" class="view-toggle-btn active" title="Power Trace">
+                            <i class="fas fa-chart-line"></i> Chart
+                        </button>
+                        <button id="view-map-btn" class="view-toggle-btn" title="Workspace Power Map">
+                            <i class="fas fa-th"></i> Workspace Map
+                        </button>
+                    </div>
+
+                    <div id="chart-view">
+                        <canvas id="power-chart"></canvas>
+                        <button id="reset-zoom-btn" class="btn-reset-zoom-overlay" title="Reset Zoom">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button id="export-csv-btn" class="btn-export-overlay" title="Export Power Trace as CSV">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <div class="metrics">
+                            <span id="metric-rmse">RMSE: 0.0 μW</span>
+                            <span id="metric-r2">R²: 0.000</span>
+                            <span id="metric-corr">ρ: 0.000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workspace Power Map (full-width, hidden by default) -->
+            <div id="workspace-map-section" class="workspace-map-section" style="display:none">
+                <div class="ws-section-header">
+                    <button id="ws-back-btn" class="view-toggle-btn" title="Back to Chart">
+                        <i class="fas fa-arrow-left"></i> Back to Chart
+                    </button>
+                    <h3>Workspace Power Map</h3>
+                </div>
+                <div class="workspace-toolbar">
+                    <div class="ws-toolbar-row">
+                        <div class="ws-mode-toggle">
+                            <button id="ws-mode-slices" class="ws-mode-btn active" title="Stacked Slices">
+                                <i class="fas fa-layer-group"></i> Slices
+                            </button>
+                            <button id="ws-mode-cube" class="ws-mode-btn" title="Volume Cube">
+                                <i class="fas fa-cube"></i> Cube
+                            </button>
+                        </div>
+                        <label>Tilt:
+                            <input type="range" id="ws-tilt-slider" min="0" max="90" value="0" step="5">
+                            <input type="number" id="ws-tilt-value" value="0" min="0" max="90" step="5" class="slider-num-input">&deg;
+                        </label>
+                        <label>Grid:
+                            <select id="ws-grid-res">
+                                <option value="20" selected>20 &times; 20</option>
+                                <option value="30">30 &times; 30</option>
+                                <option value="50">50 &times; 50</option>
+                            </select>
+                        </label>
+                        <label id="ws-slices-label">Slices:
+                            <select id="ws-num-slices">
+                                <option value="1">1 (single)</option>
+                                <option value="3">3</option>
+                                <option value="5" selected>5</option>
+                                <option value="7">7</option>
+                            </select>
+                        </label>
+                        <label>Height (Y):
+                            <input type="range" id="ws-y-slider" min="400" max="800" value="600" step="10">
+                            <input type="number" id="ws-y-value" value="600" min="400" max="800" step="10" class="slider-num-input"> mm
+                            <span class="info-icon ws-coord-tip" data-tooltip="ws-coord-info">&#9432;</span>
+                        </label>
+                    </div>
+                    <div id="ws-cube-controls" class="ws-toolbar-row" style="display:none">
+                        <label>Threshold:
+                            <input type="range" id="ws-threshold-slider" min="0" max="100" value="20" step="1">
+                            <input type="number" id="ws-threshold-value" value="20" min="0" max="100" step="1" class="slider-num-input">%
+                        </label>
+                        <span class="ws-slice-selector">
+                            Slice:
+                            <button id="ws-slice-xz" class="ws-slice-btn active" title="XZ plane (horizontal)">XZ</button>
+                            <button id="ws-slice-xy" class="ws-slice-btn" title="XY plane (frontal)">XY</button>
+                            <button id="ws-slice-yz" class="ws-slice-btn" title="YZ plane (sagittal)">YZ</button>
+                            <input type="range" id="ws-slice-pos" min="0" max="19" value="10" step="1">
+                            <span id="ws-slice-pos-label">Y=600</span>
+                        </span>
+                    </div>
+                    <div class="ws-toolbar-row">
+                        <label>Left-Right (X): <input type="number" id="ws-x-min" value="-300" step="50" class="ws-num-input"> ..
+                            <input type="number" id="ws-x-max" value="300" step="50" class="ws-num-input"> mm</label>
+                        <label>Depth (Z): <input type="number" id="ws-z-min" value="-300" step="50" class="ws-num-input"> ..
+                            <input type="number" id="ws-z-max" value="300" step="50" class="ws-num-input"> mm</label>
+                        <button id="ws-recompute-btn" class="btn btn-primary ws-recompute-btn">
+                            <i class="fas fa-sync-alt"></i> Compute
+                        </button>
+                    </div>
+                </div>
+                <div id="ws-coord-info-tooltip" class="tooltip-content ws-coord-tooltip" style="display:none">
+                    <strong>Coordinate system (Leap Motion):</strong><br>
+                    <strong>X</strong> = Left / Right (horizontal)<br>
+                    <strong>Y</strong> = Height (vertical, up from floor) &mdash; the slice axis<br>
+                    <strong>Z</strong> = Depth (forward / backward)<br>
+                    Emitter is above, emitting downward. The grid sweeps X &times; Z at a fixed height Y.
+                </div>
+                <div class="ws-main-area">
+                    <div id="workspace-map-canvas" class="workspace-map-canvas"></div>
+                    <div id="ws-side-panel" class="ws-side-panel">
+                        <h4 id="ws-side-title">Click surface to inspect</h4>
+                        <div class="ws-heatmap-wrap">
+                            <canvas id="ws-heatmap-canvas"></canvas>
+                        </div>
+                        <div class="ws-profile-wrap">
+                            <canvas id="ws-profile-chart"></canvas>
+                        </div>
+                        <div class="ws-side-info">
+                            <span id="ws-side-label"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ws-bottom-bar">
+                    <div id="workspace-colorbar" class="workspace-colorbar">
+                        <div class="colorbar-gradient"></div>
+                        <div class="colorbar-labels">
+                            <span id="colorbar-min">0</span>
+                            <span class="colorbar-title">View Factor</span>
+                            <span id="colorbar-max">1</span>
+                        </div>
+                    </div>
+                    <div id="ws-stale-indicator" class="ws-stale-indicator" style="display:none">
+                        <i class="fas fa-exclamation-triangle"></i> Parameters changed. Click <strong>Compute</strong> to update.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kappa Configuration Modal -->
+    <div id="kappa-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚙️ Configure Scaling Factor (κ)</h3>
+                <button class="modal-close" id="kappa-modal-close">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="kappa-info">
+                    <p><strong>Current κ:</strong> <span id="modal-current-kappa">0.0</span></p>
+                    <p><strong>Source:</strong> <span id="modal-kappa-source">N/A</span></p>
+                    <p class="kappa-note">κ is a constant for a given solar cell and light source setup.</p>
+                </div>
+                
+                <div class="kappa-options">
+                    <div class="radio-option">
+                        <input type="radio" id="kappa-use-calculated" name="kappa-method" value="calculated" checked>
+                        <label for="kappa-use-calculated">
+                            <strong>Use Calculated κ (from Real Data)</strong>
+                            <span class="option-desc">Least-squares fit minimizes error between real and simulated power</span>
+                        </label>
+                        <div class="calculated-info" id="calculated-kappa-info">
+                            <p>Calculated κ: <span id="calculated-kappa-value">0.0</span></p>
+                            <p>RMSE: <span id="calculated-rmse-value">0.0</span> μW</p>
+                        </div>
+                    </div>
+                    
+                    <div class="radio-option">
+                        <input type="radio" id="kappa-manual" name="kappa-method" value="manual">
+                        <label for="kappa-manual">
+                            <strong>Manual Input</strong>
+                            <span class="option-desc">Enter custom κ value (e.g., from calibration)</span>
+                        </label>
+                        <div class="manual-input-group" id="manual-kappa-group" style="display: none;">
+                            <input type="text" id="manual-kappa-input" placeholder="e.g., 2.45e-4">
+                            <span class="input-hint">Use scientific notation (e.g., 2.45e-4)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="radio-option">
+                        <input type="radio" id="kappa-physics" name="kappa-method" value="physics">
+                        <label for="kappa-physics">
+                            <strong>Calculate from Physical Parameters</strong>
+                            <span class="option-desc">Enter cell and light source properties</span>
+                        </label>
+                        <div class="physics-input-group" id="physics-kappa-group" style="display: none;">
+                            <div class="input-row">
+                                <label>Solar cell efficiency (%):</label>
+                                <input type="number" id="physics-efficiency" value="15" min="0" max="100" step="0.1">
+                            </div>
+                            <div class="input-row">
+                                <label>Cell area (cm²):</label>
+                                <input type="number" id="physics-area" value="25" min="0" step="0.1">
+                            </div>
+                            <div class="input-row">
+                                <label>Light source power (W):</label>
+                                <input type="number" id="physics-power" value="100" min="0" step="1">
+                            </div>
+                            <p class="calculated-result">Calculated κ: <span id="physics-kappa-result">0.0</span></p>
+                            <button type="button" id="calculate-physics-btn" class="btn btn-secondary">Calculate</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="kappa-cancel-btn">Cancel</button>
+                <button class="btn btn-primary" id="kappa-apply-btn">Apply & Update</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Settings Modal -->
+    <div id="settings-modal" class="modal" style="display: none;">
+        <div class="modal-content settings-modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> Advanced Settings</h3>
+                <button class="modal-close" id="settings-modal-close">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Simulation Method Section -->
+                <div class="settings-section">
+                    <h4><i class="fas fa-bolt"></i> Simulation Method</h4>
+                    <div class="radio-group settings-radio-group">
+                        <label class="settings-radio-label">
+                            <input type="radio" name="settings-accuracy" value="fast" id="settings-accuracy-fast" checked>
+                            <div class="radio-content">
+                                <strong>Fast (Approximate)</strong>
+                                <span class="radio-desc">Point source approximation. Very fast (~0.1ms), suitable for real-time animation.</span>
+                            </div>
+                        </label>
+                        <label class="settings-radio-label">
+                            <input type="radio" name="settings-accuracy" value="exact" id="settings-accuracy-exact">
+                            <div class="radio-content">
+                                <strong>Exact (Eq. A.4)</strong>
+                                <span class="radio-desc">Full disk integration with radiometric kernel. More accurate but slower.</span>
+                            </div>
+                        </label>
+                    </div>
+                    <p class="settings-note" id="settings-accuracy-note">
+                        <i class="fas fa-info-circle"></i>
+                        Exact mode only applies to "Orientation Aware" model.
+                    </p>
+                </div>
+
+                <!-- Numerical Integration Section (shown only for Exact mode) -->
+                <div class="settings-section" id="settings-integration-section">
+                    <h4><i class="fas fa-th"></i> Numerical Integration</h4>
+                    <p class="section-desc">Configure Simpson's rule grid for disk integration.</p>
+                    <div class="settings-input-row">
+                        <label for="settings-grid-radial">Radial divisions (n<sub>r</sub>):</label>
+                        <input type="number" id="settings-grid-radial" value="20" min="4" max="100" step="2">
+                    </div>
+                    <div class="settings-input-row">
+                        <label for="settings-grid-angular">Angular divisions (n<sub>φ</sub>):</label>
+                        <input type="number" id="settings-grid-angular" value="20" min="4" max="100" step="2">
+                    </div>
+                    <div class="integration-stats">
+                        <p>Integration points: <strong id="settings-integration-points">400</strong></p>
+                        <p>Estimated time: <strong id="settings-estimated-time">~5-10ms</strong> per sample</p>
+                    </div>
+                </div>
+
+                <!-- Visualization Section -->
+                <div class="settings-section">
+                    <h4><i class="fas fa-palette"></i> Visualization</h4>
+                    <p class="section-desc">Configure trajectory drawing appearance during playback.</p>
+                    <div class="settings-input-row">
+                        <label for="settings-color-threshold">Color threshold (samples):</label>
+                        <input type="number" id="settings-color-threshold" value="4000" min="100" max="10000" step="100">
+                        <span class="input-hint">Default: 4000</span>
+                    </div>
+                    <p class="settings-note">
+                        <i class="fas fa-info-circle"></i>
+                        Below threshold: power-colored trajectory. Above: uniform brown (for performance).
+                    </p>
+                </div>
+
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="settings-reset-btn">
+                    <i class="fas fa-undo"></i> Reset Defaults
+                </button>
+                <div class="footer-right">
+                    <button class="btn btn-secondary" id="settings-cancel-btn">Cancel</button>
+                    <button class="btn btn-primary" id="settings-apply-btn">
+                        <i class="fas fa-check"></i> Apply
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+

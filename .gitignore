@@ -1,0 +1,25 @@
+# data/ is published with this repository. See data/README.md for the layout
+# and the ethics approval it was collected under.
+
+# Generated artifacts
+results/
+outputs/
+runs/
+*.egg-info/
+build/
+dist/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

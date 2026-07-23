@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SolarSim &mdash; Physics-Based Simulation of Wearable Solar Harvester Signals</title>
+<meta name="description" content="SolarSim is a training-free, physics-based simulator that synthesises photovoltaic signals directly from motion-capture trajectories under configurable illumination.">
+
+<meta property="og:title" content="SolarSim: Physics-Based Simulation of Wearable Solar Harvester Signals for Motion Sensing">
+<meta property="og:description" content="A training-free simulator that turns motion trajectories into wearable solar signals, under any lighting configuration.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/overview.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/SolarSim/assets/main-pPgx2cKd.js"></script>
+  <link rel="modulepreload" crossorigin href="/SolarSim/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="stylesheet" crossorigin href="/SolarSim/assets/main-Bt219ssg.css">
+  <link rel="stylesheet" crossorigin href="/SolarSim/assets/katex-BrEcCoaT.css">
+</head>
+<body>
+
+<!-- ====================== NAV ====================== -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="#top">SolarSim <span class="tag">UbiComp&nbsp;2026</span></a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+    <div class="nav-links" id="nav-links">
+      <a href="#overview">Overview</a>
+      <a href="#method">Method</a>
+      <a href="#demo">Demo</a>
+      <a href="#findings">Findings</a>
+      <a href="#paper">Paper</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ====================== HERO ====================== -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-kicker">Wearable Solar Sensing &middot; Physics-Based Simulation</div>
+    <h1>Turning motion into <span class="accent">solar signals</span>, without collecting any</h1>
+    <p class="hero-sub">
+      SolarSim is the first training-free, physics-based simulator for wearable solar sensing.
+      It synthesises photovoltaic traces directly from motion-capture trajectories under
+      configurable illumination &mdash; no paired recordings, no network to train.
+    </p>
+
+    <p class="authors">
+      Yasien Ghalwash<sup>1*</sup>,
+      Abdelwahed Khamis<sup>1,2</sup>,
+      Sara Khalifa<sup>1</sup>,
+      Moid Sandhu<sup>1,3</sup>,
+      Raja Jurdak<sup>1</sup>
+    </p>
+    <p class="affil">
+      <sup>1</sup>Queensland University of Technology &nbsp;&middot;&nbsp;
+      <sup>2</sup>Data61, CSIRO &nbsp;&middot;&nbsp;
+      <sup>3</sup>AEHRC, CSIRO &nbsp;&nbsp;|&nbsp;&nbsp;
+      <sup>*</sup>Corresponding author
+    </p>
+
+    <div class="btn-row">
+      <a class="btn primary" href="simulator/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Try the simulator
+      </a>
+      <a class="btn disabled" href="#paper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Paper <span class="soon">soon</span>
+      </a>
+      <a class="btn" href="https://github.com/Yasien99/SolarSim" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3z"/></svg>
+        Code
+      </a>
+      <a class="btn" href="https://github.com/Yasien99/SolarSim/tree/main/data" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg>
+        Dataset
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ====================== STAT BAND ====================== -->
+<section class="stats">
+  <div class="wrap stats-grid">
+    <div class="stat"><div class="stat-value">0.80&ndash;0.91</div><div class="stat-label">Correlation with real signals</div></div>
+    <div class="stat"><div class="stat-value">15</div><div class="stat-label">Participants</div></div>
+    <div class="stat"><div class="stat-value">10</div><div class="stat-label">Emitter configurations</div></div>
+    <div class="stat"><div class="stat-value">75%</div><div class="stat-label">Real data replaced</div></div>
+    <div class="stat"><div class="stat-value">Zero</div><div class="stat-label">Training required</div></div>
+    <div class="stat"><div class="stat-value">2</div><div class="stat-label">Downstream tasks</div></div>
+  </div>
+</section>
+
+<!-- ====================== OVERVIEW ====================== -->
+<section class="section" id="overview">
+  <div class="wrap">
+    <div class="eyebrow">Overview</div>
+    <h2 class="section-title">Solar cells sense motion &mdash; but every deployment needs its own data</h2>
+    <p class="section-lede">
+      A wearable solar harvester powers itself and senses movement at the same time. The catch is
+      that its signal depends entirely on the light around it, so models are retrained for every
+      participant and every room.
+    </p>
+
+    <div class="abstract">
+      <h3>Abstract</h3>
+      <p>
+        Wearable solar harvesters can simultaneously harvest energy and sense motion, enabling
+        self-sustaining ubiquitous sensing. However, existing solar-sensing systems require real
+        photovoltaic (PV) recordings collected for each participant under varied illumination
+        environments, creating a scalability bottleneck for data-intensive tasks such as continuous
+        motion tracking. We present SolarSim, the first training-free physics-based simulator for
+        wearable solar sensing. SolarSim synthesises PV signals directly from motion trajectories
+        within a unified radiometric framework that supports varied illumination intensities,
+        emitter geometries, and multi-emitter scenes, producing signals that closely match real
+        data. We evaluate SolarSim on two downstream tasks: wrist-gesture classification and
+        continuous hand-trajectory tracking, showing that simulated data can replace a substantial
+        portion of real data with minimal performance loss, particularly for tracking, where
+        accuracy remains largely stable.
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card prose-card">
+        <h3>Why this is hard</h3>
+        <p>
+          The signal a solar cell produces depends on the geometry between it and every light source
+          in the room. <strong>Add a lamp, move the desk, or swap the cell, and the mapping changes.</strong>
+          A model trained in one environment rarely transfers to another without retraining.
+        </p>
+        <p>
+          The cost scales with task complexity. Classification needs only discrete labels; continuous
+          tracking needs dense, time-aligned ground truth from motion capture &mdash; which scales
+          poorly across participants and trajectories.
+        </p>
+      </div>
+      <div class="card prose-card">
+        <h3>Our approach</h3>
+        <p>
+          SolarSim separates <strong>geometry from hardware</strong>. A radiometric view-factor model
+          handles the geometry; everything hardware-specific &mdash; cell efficiency and area, source
+          intensity, spectral response &mdash; collapses into a single calibration scalar per emitter.
+        </p>
+        <p>
+          Changing the room means editing a scene description. Changing the harvester means refitting
+          one number. <strong>Neither requires retraining anything</strong>, because nothing was
+          trained in the first place.
+        </p>
+      </div>
+    </div>
+
+    <figure>
+      <img src="assets/overview.png" alt="SolarSim pipeline: light source configurations and a wrist motion-capture trajectory feed a radiometric model that outputs a simulated power trace, used for tracking and gesture classification." loading="lazy">
+      <figcaption><b>Figure 1.</b> Given a 3D hand trajectory from motion capture and a light source configuration &mdash; emitter geometry, position, and orientation &mdash; SolarSim applies a radiometric model to generate a synthetic solar power trace, usable for continuous tracking and gesture classification.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="assets/setup.jpg" alt="Overhead photograph of the data-collection desk: two light sources, a laptop, a Leap Motion controller, and the wrist-worn solar harvesting device." loading="lazy">
+      <figcaption><b>Figure 2.</b> Data collection setup. A wrist-mounted solar module and IMU are recorded alongside hand position and palm orientation from a Leap Motion controller, under configurable overhead lighting.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ====================== METHOD ====================== -->
+<section class="section alt" id="method">
+  <div class="wrap">
+    <div class="eyebrow teal">The Method</div>
+    <h2 class="section-title">Two inputs, one shared kernel, one calibration scalar</h2>
+    <p class="section-lede">
+      SolarSim takes a motion trajectory and a description of the lighting, and evaluates a
+      radiometric integral for every source in the scene.
+    </p>
+
+    <div class="pipeline">
+      <div class="stage">
+        <div class="stage-num">1</div>
+        <h3>Motion in</h3>
+        <p>
+          Any motion-capture system supplies timestamped 3D cell positions and outward normals.
+          That is the entire motion input &mdash; no IMU, no paired PV recording.
+        </p>
+      </div>
+      <div class="stage">
+        <div class="stage-num">2</div>
+        <h3>View factors</h3>
+        <p>
+          For each source, a radiometric kernel is integrated over the emitter surface, capturing
+          the geometric coupling between source and cell. Purely geometric &mdash; no hardware in it.
+        </p>
+      </div>
+      <div class="stage">
+        <div class="stage-num">3</div>
+        <h3>Power out</h3>
+        <p>
+          Per-source view factors are scaled by a calibration constant fit once per environment
+          and summed, yielding the predicted power trace.
+        </p>
+      </div>
+    </div>
+
+    <div class="equation">
+      <div class="eq-label">Harvested power &mdash; superposition over all emitters</div>
+      <div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:3.4124em;vertical-align:-1.5841em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">M</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">κ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.0993em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0993em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:-0.1667em;"></span><span class="mopen"><span class="delimsizing size2">(</span></span><span class="minner munder"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.75em;"><span style="top:-1.4159em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cell state</span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="minner munder"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.75em;"><span class="svg-align" style="top:-2.102em;"><span class="pstrut" style="height:3em;"></span><span class="katex-stretchy" style="height:0.548em;min-width:1.6em;"><span class="brace-left" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.548em" viewBox="0 0 400000 548" preserveAspectRatio="xMinYMin slice"><path d="M0 6l6-6h17c12.688 0 19.313.3 20 1 4 4 7.313 8.3 10 13
+ 35.313 51.3 80.813 93.8 136.5 127.5 55.688 33.7 117.188 55.8 184.5 66.5.688
+ 0 2 .3 4 1 18.688 2.7 76 4.3 172 5h399450v120H429l-6-1c-124.688-8-235-61.7
+-331-161C60.687 138.7 32.312 99.3 7 54L0 41V6z"/></svg></span><span class="brace-center" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.548em" viewBox="0 0 400000 548" preserveAspectRatio="xMidYMin slice"><path d="M199572 214
+c100.7 8.3 195.3 44 280 108 55.3 42 101.7 93 139 153l9 14c2.7-4 5.7-8.7 9-14
+ 53.3-86.7 123.7-153 211-199 66.7-36 137.3-56.3 212-62h199568v120H200432c-178.3
+ 11.7-311.7 78.3-403 201-6 8-9.7 12-11 12-.7.7-6.7 1-18 1s-17.3-.3-18-1c-1.3 0
+-5-4-11-12-44.7-59.3-101.3-106.3-170-141s-145.3-54.3-229-60H0V214z"/></svg></span><span class="brace-right" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.548em" viewBox="0 0 400000 548" preserveAspectRatio="xMaxYMin slice"><path d="M399994 0l6 6v35l-6 11c-56 104-135.3 181.3-238 232-57.3
+ 28.7-117 45-179 50H-300V214h399897c43.3-7 81-15 113-26 100.7-33 179.7-91 237
+-174 2.7-5 6-9 10-13 .7-1 7.3-1 20-1h17z"/></svg></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathbf">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.898em;"><span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5841em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner munder"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6833em;"><span style="top:-1.4402em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">source </span></span><span class="mord mathnormal mtight">i</span><span class="mord text mtight"><span class="mord mtight"> state</span></span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="minner munder"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6833em;"><span class="svg-align" style="top:-2.1019em;"><span class="pstrut" style="height:3em;"></span><span class="katex-stretchy" style="height:0.548em;min-width:1.6em;"><span class="brace-left" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.548em" viewBox="0 0 400000 548" preserveAspectRatio="xMinYMin slice"><path d="M0 6l6-6h17c12.688 0 19.313.3 20 1 4 4 7.313 8.3 10 13
+ 35.313 51.3 80.813 93.8 136.5 127.5 55.688 33.7 117.188 55.8 184.5 66.5.688
+ 0 2 .3 4 1 18.688 2.7 76 4.3 172 5h399450v120H429l-6-1c-124.688-8-235-61.7
+-331-161C60.687 138.7 32.312 99.3 7 54L0 41V6z"/></svg></span><span class="brace-center" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.548em" viewBox="0 0 400000 548" preserveAspectRatio="xMidYMin slice"><path d="M199572 214
+c100.7 8.3 195.3 44 280 108 55.3 42 101.7 93 139 153l9 14c2.7-4 5.7-8.7 9-14
+ 53.3-86.7 123.7-153 211-199 66.7-36 137.3-56.3 212-62h199568v120H200432c-178.3
+ 11.7-311.7 78.3-403 201-6 8-9.7 12-11 12-.7.7-6.7 1-18 1s-17.3-.3-18-1c-1.3 0
+-5-4-11-12-44.7-59.3-101.3-106.3-170-141s-145.3-54.3-229-60H0V214z"/></svg></span><span class="brace-right" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.548em" viewBox="0 0 400000 548" preserveAspectRatio="xMaxYMin slice"><path d="M399994 0l6 6v35l-6 11c-56 104-135.3 181.3-238 232-57.3
+ 28.7-117 45-179 50H-300V214h399897c43.3-7 81-15 113-26 100.7-33 179.7-91 237
+-174 2.7-5 6-9 10-13 .7-1 7.3-1 20-1h17z"/></svg></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="katex-sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathbf">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="katex-sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">Γ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8981em;"><span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.5598em;"><span></span></span></span></span></span><span class="mclose"><span class="delimsizing size2">)</span></span></span></span></span></span></div>
+      <div class="caption">
+        <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">κ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is a scalar absorbing all hardware and source properties &mdash; cell efficiency
+        and area, source intensity, spectral response. <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.0993em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0993em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is a purely geometric view
+        factor.
+      </div>
+    </div>
+
+    <div class="equation" style="margin-top:18px">
+      <div class="eq-label">View factor &mdash; the shared radiometric kernel</div>
+      <div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.0993em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0993em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:3.9935em;vertical-align:-2.5665em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.4445em;position:relative;top:-0.001em;">∬</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:-0.4334em;"><span style="top:-1.7883em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="katex-sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.0118em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner munder"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-1.118em;"><span class="pstrut" style="height:3.427em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0715em;">K</span><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathbf mtight">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="katex-sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mord mtight"><span class="mord mathbf mtight">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1645em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="katex-sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3448em;margin-left:0em;margin-right:0.1em;"><span class="pstrut" style="height:2.6595em;"></span><span class="mord mathnormal mtight">i</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3147em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3678em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mspace mtight" style="margin-right:0.1952em;"></span><span class="mord mtight"><span class="mord mathbf mtight">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1645em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="katex-sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.427em;"><span class="pstrut" style="height:3.427em;"></span><span class="minner munder"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span class="svg-align" style="top:-1.843em;"><span class="pstrut" style="height:3.427em;"></span><span class="katex-stretchy" style="height:0.548em;min-width:1.6em;"><span class="brace-left" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.548em" viewBox="0 0 400000 548" preserveAspectRatio="xMinYMin slice"><path d="M0 6l6-6h17c12.688 0 19.313.3 20 1 4 4 7.313 8.3 10 13
+ 35.313 51.3 80.813 93.8 136.5 127.5 55.688 33.7 117.188 55.8 184.5 66.5.688
+ 0 2 .3 4 1 18.688 2.7 76 4.3 172 5h399450v120H429l-6-1c-124.688-8-235-61.7
+-331-161C60.687 138.7 32.312 99.3 7 54L0 41V6z"/></svg></span><span class="brace-center" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.548em" viewBox="0 0 400000 548" preserveAspectRatio="xMidYMin slice"><path d="M199572 214
+c100.7 8.3 195.3 44 280 108 55.3 42 101.7 93 139 153l9 14c2.7-4 5.7-8.7 9-14
+ 53.3-86.7 123.7-153 211-199 66.7-36 137.3-56.3 212-62h199568v120H200432c-178.3
+ 11.7-311.7 78.3-403 201-6 8-9.7 12-11 12-.7.7-6.7 1-18 1s-17.3-.3-18-1c-1.3 0
+-5-4-11-12-44.7-59.3-101.3-106.3-170-141s-145.3-54.3-229-60H0V214z"/></svg></span><span class="brace-right" style="height:0.548em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.548em" viewBox="0 0 400000 548" preserveAspectRatio="xMaxYMin slice"><path d="M399994 0l6 6v35l-6 11c-56 104-135.3 181.3-238 232-57.3
+ 28.7-117 45-179 50H-300V214h399897c43.3-7 81-15 113-26 100.7-33 179.7-91 237
+-174 2.7-5 6-9 10-13 .7-1 7.3-1 20-1h17z"/></svg></span></span></span><span style="top:-3.427em;"><span class="pstrut" style="height:3.427em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">∥</span><span class="mord"><span class="mord mathbf">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">∥</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord"><span class="mord mathbf">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathbf">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="katex-sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord"><span class="mord mathbf">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathbf">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.584em;"><span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.5665em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathbf">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7778em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathbf">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8019em;"></span><span class="mord"><span class="mord mathbf">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+      <div class="caption">
+        <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span></span></span></span> encodes inverse-square attenuation and the two cosine projections. It depends only on
+        <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6861em;"></span><span class="mord mathbf">R</span></span></span></span> and the two surface normals &mdash; <b>not on the source&rsquo;s shape</b>.
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:18px">
+      <div class="equation">
+        <div class="eq-label">Circular emitter &mdash; polar domain</div>
+        <div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.0993em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3175em;"><span style="top:-2.55em;margin-left:-0.0993em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">circ</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.5499em;vertical-align:-0.9119em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.4445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6379em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">D</span><span class="mord mtight">/2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:-0.1667em;"></span><span class="mspace" style="margin-right:-0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.4445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.564em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight" style="margin-right:0.0359em;">π</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span><span class="mopen"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mord mathbf">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">ϕ</span><span class="mclose">)</span><span class="mclose"><span class="delimsizing size1">)</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">ϕ</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span></div>
+      </div>
+      <div class="equation">
+        <div class="eq-label">Rectangular emitter &mdash; Cartesian domain</div>
+        <div class="math-block"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.0993em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0993em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">rect</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.7248em;vertical-align:-1.0869em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.4445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6379em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathnormal mtight">L</span><span class="mord mtight">/2</span></span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span><span class="mord mtight">/2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.0869em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:-0.1667em;"></span><span class="mspace" style="margin-right:-0.1667em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.4445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6379em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.1389em;">W</span><span class="mord mtight">/2</span></span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">W</span><span class="mord mtight">/2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.0869em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">K</span><span class="mopen"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mord mathbf">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mclose">)</span><span class="mclose"><span class="delimsizing size1">)</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">u</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span></span></span></span></span></div>
+      </div>
+    </div>
+    <p style="text-align:center;color:var(--muted);font-size:.88rem;margin-top:14px">
+      Changing geometry changes only the integration domain <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and its parametrisation of
+      <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathbf">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span>. Both integrals are evaluated with Simpson&rsquo;s rule on a 2D grid.
+    </p>
+
+    <div class="grid-2" style="margin-top:22px">
+      <div class="card prose-card">
+        <h3>One kernel, any geometry</h3>
+        <p>
+          The radiometric kernel depends only on the source-to-cell vector and the two surface
+          normals &mdash; <strong>not on the emitter&rsquo;s shape</strong>. Changing geometry changes
+          only the integration domain and how the surface is parametrised; the kernel is reused
+          unchanged.
+        </p>
+        <p>
+          Circular sources integrate in polar coordinates, rectangular ones in local tangent
+          coordinates. Both are evaluated with Simpson&rsquo;s rule on a 2D grid.
+        </p>
+        <div class="chips">
+          <span class="chip on">Circular &mdash; desk lamps, downlights</span>
+          <span class="chip on">Rectangular &mdash; LED panels, troffers</span>
+          <span class="chip">Spherical</span>
+        </div>
+      </div>
+      <div class="card prose-card">
+        <h3>Calibrating &kappa;</h3>
+        <p>
+          The scalars are estimated <strong>once per environment</strong> from a short paired
+          motion&ndash;PV recording of about 60 seconds, then reused for everything else recorded
+          there.
+        </p>
+        <div class="math-block small"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7079em;"></span><span class="mord katex-accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7079em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">κ</span></span></span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.6623em;vertical-align:-0.8123em;"></span><span class="mop">ar<span style="margin-right:0.0139em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-2.3829em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord boldsymbol mtight">κ</span></span></span><span class="mrel mtight">⪰</span><span class="mord mtight">0</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">min</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8123em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-2.85em;"><span class="pstrut" style="height:3.2em;"></span><span style="width:0.556em;height:1.2em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.556em" height="1.2em" viewBox="0 0 556 1200"><path d="M145 15 v585 v0 v585 c2.667,10,9.667,15,21,15
+c10,0,16.667,-5,20,-15 v-585 v0 v-585 c-2.667,-10,-9.667,-15,-21,-15
+c-10,0,-16.667,5,-20,15z M188 15 H145 v585 v0 v585 h43z
+M367 15 v585 v0 v585 c2.667,10,9.667,15,21,15
+c10,0,16.667,-5,20,-15 v-585 v0 v-585 c-2.667,-10,-9.667,-15,-21,-15
+c-10,0,-16.667,5,-20,15z M410 15 H367 v585 v0 v585 h43z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mord"><span class="mord"><span class="mord boldsymbol">κ</span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.4537em;vertical-align:-0.3997em;"></span><span class="mord mathbf">P</span><span class="mclose"><span class="mclose"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-2.85em;"><span class="pstrut" style="height:3.2em;"></span><span style="width:0.556em;height:1.2em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.556em" height="1.2em" viewBox="0 0 556 1200"><path d="M145 15 v585 v0 v585 c2.667,10,9.667,15,21,15
+c10,0,16.667,-5,20,-15 v-585 v0 v-585 c-2.667,-10,-9.667,-15,-21,-15
+c-10,0,-16.667,5,-20,15z M188 15 H145 v585 v0 v585 h43z
+M367 15 v585 v0 v585 c2.667,10,9.667,15,21,15
+c10,0,16.667,-5,20,-15 v-585 v0 v-585 c-2.667,-10,-9.667,-15,-21,-15
+c-10,0,-16.667,5,-20,15z M410 15 H367 v585 v0 v585 h43z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.054em;"><span style="top:-2.3003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.3029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3997em;"><span></span></span></span></span></span></span></span></span></span></span></div>
+        <p>
+          Non-negativity keeps every source&rsquo;s contribution physical and stops noise being
+          absorbed into offsetting weights. A single emitter reduces to scalar least squares.
+        </p>
+        <div class="chips">
+          <span class="chip">Geometry measured once at room setup</span>
+          <span class="chip">Re-fit only if lighting is reconfigured</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== DEMO ====================== -->
+<section class="section" id="demo">
+  <div class="wrap">
+    <div class="eyebrow">Interactive Demo</div>
+    <h2 class="section-title">Run the physics in your browser</h2>
+    <p class="section-lede">
+      The simulator runs the same radiometric model as the paper. Move the light, pick a gesture,
+      and watch the power trace respond in real time.
+    </p>
+
+    <div class="demo-layout">
+      <div class="demo-media">
+        <span class="demo-badge"><span class="dot"></span> Live physics</span>
+        <!-- Replace this canvas with <img src="assets/demo.gif"> or a looping
+             <video> if you record the real simulator UI. The canvas fallback
+             renders the actual view-factor model, so it stays accurate. -->
+        <canvas id="demo-preview" width="960" height="600" aria-label="Animated preview: a wrist-worn solar cell traces a gesture under an overhead lamp while the simulated power trace is drawn below."></canvas>
+      </div>
+
+      <div class="demo-copy">
+        <h3>See geometry become signal</h3>
+        <p>
+          Every peak in the trace is the cell swinging toward the lamp; every trough is it turning
+          away or moving further off-axis. The simulator makes that coupling visible.
+        </p>
+        <ul class="demo-points">
+          <li>Drag the emitter and watch the waveform reshape</li>
+          <li>Switch between recorded gestures, or draw your own trajectory</li>
+          <li>Compare simulated output against real recordings</li>
+          <li>Upload your own motion CSV</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn primary" href="simulator/">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Try it out
+          </a>
+          <a class="btn" href="https://github.com/Yasien99/SolarSim" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Python package
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FINDINGS ====================== -->
+<section class="section alt" id="findings">
+  <div class="wrap">
+    <div class="eyebrow indigo">Findings</div>
+    <h2 class="section-title">What the physics buys you</h2>
+    <p class="section-lede">
+      Validated along two axes: signal fidelity against real measurements across ten emitter
+      configurations, and downstream utility on gesture classification and continuous tracking.
+    </p>
+
+    <div class="findings">
+      <article class="finding">
+        <div class="finding-num">01</div>
+        <div>
+          <h3>Fidelity holds across illumination</h3>
+          <p>
+            Across four source intensities spanning two orders of magnitude and three colour
+            temperatures, correlation stays in a narrow band. Per-environment &kappa;-fitting absorbs
+            both the intensity scaling and the spectral shift, leaving shape fidelity intact.
+          </p>
+          <div class="metrics">
+            <div class="metric"><span class="v">0.848&ndash;0.908</span><span class="l">&rho;, single circular</span></div>
+            <div class="metric"><span class="v">0.4&ndash;40 klx</span><span class="l">intensity range</span></div>
+            <div class="metric"><span class="v">2400&ndash;6000 K</span><span class="l">colour temperature</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding">
+        <div class="finding-num">02</div>
+        <div>
+          <h3>The kernel is geometry-agnostic</h3>
+          <p>
+            Replacing the circular emitter with a rectangular one swaps the integration domain from
+            polar to Cartesian while reusing the kernel unchanged. Fidelity sits just below the
+            circular range &mdash; the kernel transfers across geometry under the same calibration
+            protocol.
+          </p>
+          <div class="metrics">
+            <div class="metric"><span class="v">0.818</span><span class="l">&rho;, rectangular emitter</span></div>
+            <div class="metric"><span class="v">0.103</span><span class="l">nRMSE</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding">
+        <div class="finding-num">03</div>
+        <div>
+          <h3>Multi-emitter scenes compose additively</h3>
+          <p>
+            Two circular emitters at 50 cm and 110 cm separation both land within the single-emitter
+            spread, and pairing a circular with a rectangular source works under the same
+            superposition framework &mdash; heterogeneous geometries in one scene, one calibration.
+          </p>
+          <div class="metrics">
+            <div class="metric"><span class="v">0.810 / 0.817</span><span class="l">&rho;, dual circular</span></div>
+            <div class="metric"><span class="v">0.800</span><span class="l">&rho;, circular + rectangular</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding">
+        <div class="finding-num">04</div>
+        <div>
+          <h3>Simulation replaces most real training data</h3>
+          <p>
+            Substituting simulated recordings for real ones degrades tracking remarkably slowly:
+            three quarters of the training set can be synthetic for a 4.1% increase in median error.
+            Classification tolerates half before accuracy moves meaningfully.
+          </p>
+          <div class="metrics">
+            <div class="metric"><span class="v">+4.1%</span><span class="l">tracking error at 75% synthetic</span></div>
+            <div class="metric"><span class="v">8.04 &rarr; 8.37 cm</span><span class="l">median 2D error</span></div>
+            <div class="metric"><span class="v">&minus;3.3%</span><span class="l">classification at 50% synthetic</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding">
+        <div class="finding-num">05</div>
+        <div>
+          <h3>Physics beats learned simulation at the limit</h3>
+          <p>
+            Against XSolar, a conditional GAN that maps IMU to PV, the two stay comparable through
+            75% substitution. At full replacement they diverge sharply: with no real data to anchor
+            it, the learned distribution collapses toward chance while the physics-based traces
+            preserve class-discriminative structure by construction.
+          </p>
+          <div class="metrics">
+            <div class="metric"><span class="v">77.8%</span><span class="l">SolarSim, 100% synthetic</span></div>
+            <div class="metric"><span class="v">34.9%</span><span class="l">XSolar (chance = 33.3%)</span></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <figure>
+      <img src="assets/gestures_real_vs_sim.gif" alt="Animation: measured and simulated photovoltaic power drawn over time for six gestures under the baseline configuration." loading="lazy">
+      <figcaption><b>Figure 3.</b> One repetition of each gesture under the baseline configuration, measured against simulated. The faint trace is the raw measurement; the solid line is its denoised form. SolarSim never sees a PV recording &mdash; only the trajectory.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="assets/three_across_configs.gif" alt="Animation: measured and simulated photovoltaic power for gesture Three across six emitter configurations." loading="lazy">
+      <figcaption><b>Figure 4.</b> The same gesture (<i>Three</i>) across six emitter configurations, spanning two orders of magnitude in illuminance, three colour temperatures, both emitter geometries, and multi-emitter scenes. Only the scene description changes between panels.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="assets/combined_replacement.png" alt="Two panels: classification accuracy versus simulation replacement fraction for six classifiers, and cumulative distribution of 2D tracking error at each replacement level." loading="lazy">
+      <figcaption><b>Figure 5.</b> Effect of synthetic substitution on (a) gesture classification accuracy and (b) hand-tracking position error.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="assets/substitution_3class.png" alt="Classification accuracy under substitution comparing SolarSim against the XSolar GAN on a three-class problem." loading="lazy">
+      <figcaption><b>Figure 6.</b> SolarSim against XSolar, a conditional GAN. The two stay comparable through 75% substitution; at full replacement XSolar collapses toward chance while the physics-based traces hold.</figcaption>
+    </figure>
+
+    <h3 style="margin:46px 0 16px;font-size:1.15rem">Fidelity across every configuration</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Configuration</th><th>Emitter</th><th>CCT / Illuminance</th>
+            <th>&rho;</th><th>RMSE (&micro;W)</th><th>nRMSE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Baseline</td><td>Circular</td><td>6000 K / 40 klx</td><td class="num hi">0.861</td><td class="num">39.95</td><td class="num">0.110</td></tr>
+          <tr><td>Intensity sweep</td><td>Circular</td><td>6000 K / 30 klx</td><td class="num">0.848</td><td class="num">20.04</td><td class="num">0.109</td></tr>
+          <tr><td>Intensity sweep</td><td>Circular</td><td>6000 K / 15 klx</td><td class="num">0.858</td><td class="num">17.65</td><td class="num">0.116</td></tr>
+          <tr><td>Intensity sweep</td><td>Circular</td><td>6000 K / 0.4 klx</td><td class="num hi">0.908</td><td class="num">3.20</td><td class="num">0.089</td></tr>
+          <tr><td>Colour temperature</td><td>Circular</td><td>4000 K / 40 klx</td><td class="num">0.867</td><td class="num">43.35</td><td class="num">0.105</td></tr>
+          <tr><td>Colour temperature</td><td>Circular</td><td>2400 K / 40 klx</td><td class="num hi">0.891</td><td class="num">43.46</td><td class="num">0.097</td></tr>
+          <tr><td>Geometry</td><td>Rectangular</td><td>6000 K / 40 klx</td><td class="num">0.818</td><td class="num">3.36</td><td class="num">0.103</td></tr>
+          <tr><td>Multi-emitter</td><td>Dual circular</td><td><i>d</i> = 50 cm</td><td class="num">0.810</td><td class="num">27.63</td><td class="num">0.102</td></tr>
+          <tr><td>Multi-emitter</td><td>Dual circular</td><td><i>d</i> = 110 cm</td><td class="num">0.817</td><td class="num">5.08</td><td class="num">0.100</td></tr>
+          <tr><td>Multi-emitter</td><td>Circular + rect.</td><td><i>d</i> = 70 cm</td><td class="num">0.800</td><td class="num">8.76</td><td class="num">0.113</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card prose-card" style="margin-top:24px">
+      <h3>Where it breaks down</h3>
+      <p>
+        SolarSim assumes line-of-sight propagation, negligible ambient illumination, and no
+        significant interreflections. These hold approximately for wrist-mounted indoor task
+        lighting, but weaken in cluttered or highly reflective environments, and under strong
+        daylight.
+      </p>
+      <p>
+        The second limitation comes from the motion stream itself. The model depends directly on the
+        estimated cell normal, so under rapid wrist rotation or self-occlusion, <strong>pose-estimation
+        quality &mdash; not the radiometric formulation &mdash; becomes the dominant source of error</strong>.
+        This is visible in free-movement recordings, the lowest-fidelity regime we report.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== PAPER ====================== -->
+<section class="section" id="paper">
+  <div class="wrap">
+    <div class="eyebrow">Paper &amp; Resources</div>
+    <h2 class="section-title">Read it, run it, extend it</h2>
+    <p class="section-lede">
+      The simulator, the scene configurations for every illumination setup in the paper, and the
+      recordings are all released.
+    </p>
+
+    <div class="grid-3" style="margin-bottom:34px">
+      <a class="card prose-card" href="#paper" style="color:inherit">
+        <h3>&#128196; Paper</h3>
+        <p>Full text, appendices, and derivations. Coming with the camera-ready release.</p>
+      </a>
+      <a class="card prose-card" href="https://github.com/Yasien99/SolarSim" target="_blank" rel="noopener" style="color:inherit">
+        <h3>&#128187; Code</h3>
+        <p>The <code>pysolarsim</code> package &mdash; configurable simulator, CLI, and Python API.</p>
+      </a>
+      <a class="card prose-card" href="https://github.com/Yasien99/SolarSim/tree/main/data" target="_blank" rel="noopener" style="color:inherit">
+        <h3>&#128202; Dataset</h3>
+        <p>Synchronised PV, IMU, and hand-trajectory recordings from 15 participants.</p>
+      </a>
+    </div>
+
+    <h3 style="margin-bottom:14px;font-size:1.05rem">BibTeX</h3>
+    <div class="bibtex">
+      <button class="copy-btn" id="copy-bib">Copy</button>
+      <pre id="bib-text">@inproceedings{<span class="key">ghalwash2026solarsim</span>,
+  <span class="field">title</span>     = {SolarSim: Physics-Based Simulation of Wearable Solar
+               Harvester Signals for Motion Sensing},
+  <span class="field">author</span>    = {Ghalwash, Yasien and Khamis, Abdelwahed and Khalifa, Sara
+               and Sandhu, Moid and Jurdak, Raja},
+  <span class="field">booktitle</span> = {Proceedings of the ACM on Interactive, Mobile, Wearable
+               and Ubiquitous Technologies},
+  <span class="field">year</span>      = {2026},
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FOOTER ====================== -->
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div>SolarSim &middot; Queensland University of Technology &amp; CSIRO</div>
+    <div>Data collected under QUT Human Research Ethics approval #9665</div>
+  </div>
+</footer>
+
+</body>
+</html>

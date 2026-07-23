@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarSim Simulator &mdash; Help &amp; Documentation</title>
+    <!-- KaTeX for equations -->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" crossorigin href="/SolarSim/assets/help-DvhHSlPm.css">
+  <link rel="stylesheet" crossorigin href="/SolarSim/assets/katex-BrEcCoaT.css">
+</head>
+<body>
+    <div class="help-container">
+        <!-- Header -->
+        <header class="help-header">
+            <div class="header-left">
+                <img src="/SolarSim/assets/icon.svg" alt="SolarSim" class="help-logo">
+                <h1>Radiometric Simulator</h1>
+            </div>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Simulator
+            </a>
+        </header>
+
+        <div class="help-content">
+            <!-- Navigation Sidebar -->
+            <nav class="help-nav">
+                <ul>
+                    <li><a href="#overview" class="nav-link active"><i class="fas fa-home"></i> Overview</a></li>
+                    <li><a href="#quick-start" class="nav-link"><i class="fas fa-rocket"></i> Quick Start</a></li>
+                    <li><a href="#interface" class="nav-link"><i class="fas fa-chart-line"></i> Power Output</a></li>
+                    <li><a href="#models" class="nav-link"><i class="fas fa-cube"></i> View Factor ℱ</a></li>
+                    <li><a href="#kappa" class="nav-link"><i class="fas fa-sliders-h"></i> Scale κ</a></li>
+                    <li><a href="#advanced" class="nav-link"><i class="fas fa-cog"></i> Advanced Settings</a></li>
+                    <li><a href="#csv-format" class="nav-link"><i class="fas fa-route"></i> Input Format</a></li>
+                    <li><a href="#citation" class="nav-link"><i class="fas fa-quote-left"></i> Citation</a></li>
+                    <li><a href="#references" class="nav-link"><i class="fas fa-book"></i> References</a></li>
+                </ul>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="help-main">
+                <!-- Overview -->
+                <section id="overview" class="help-section">
+                    <h2><i class="fas fa-home"></i> Overview</h2>
+                    
+                    <figure class="overview-figure">
+                        <img src="/SolarSim/assets/overview.png" alt="SolarSim overview: light source configurations and a motion-capture trajectory feed the radiometric model, producing a simulated solar power trace">
+                    </figure>
+
+                    <p class="lead">
+                        The SolarSim Interactive Simulator is a tool for visualizing 
+                        and analyzing power harvesting from wearable solar cells under controlled lighting conditions.
+                        It provides radiometric simulation with two physics-based models (Orientation Aware 
+                        and Parallel Disk), configurable light source position and diameter with real-time 
+                        visualization, and export functionality  for simulated power traces in CSV format.
+                    </p>
+
+                    <div class="equation-box">
+                        <p>The fundamental power equation:</p>
+                        <span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.4445em;"></span><span class="mord mathnormal">κ</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathcal" style="margin-right:0.0993em;">F</span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">ϵ</span></span></span></span></span>
+                        <p class="equation-note">
+                            where <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span> is harvested power, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">κ</span></span></span></span> is the scaling factor, 
+                            <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.0993em;">F</span></span></span></span> is the view factor function, and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">ϵ</span></span></span></span> is noise.
+                        </p>
+                    </div>
+
+                    <div class="further-reading-note">
+                        <p>
+                            <i class="fas fa-book-open"></i> <strong>View factor <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.0993em;">F</span></span></span></span>:</strong> 
+                            The fraction of radiant energy leaving the light source surface that strikes 
+                            the solar cell surface directly. It depends purely on the geometry—the relative 
+                            position, orientation, and size of the two surfaces.
+                        </p>
+                        <p style="margin-top: 0.75rem;">
+                            For background on view factor theory, see 
+                            <a href="#ref-modest">Modest [1]</a> and <a href="#ref-bergman">Bergman et al. [2]</a>.
+                        </p>
+                    </div>
+
+                    <div class="further-reading-note">
+                        <p>
+                            <i class="fas fa-info-circle"></i> <strong>Current assumptions:</strong> 
+                            single dominant emitter, uniform irradiance over cell, 
+                            and cell positioned below the lamp (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>).
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Quick Start - Equation-Driven Interactive Guide -->
+                <section id="quick-start" class="help-section">
+                    <h2><i class="fas fa-rocket"></i> Quick Start</h2>
+                    
+                    <p class="section-intro">
+                        Everything in the simulator connects to one equation. Hover over each symbol to see what it controls:
+                    </p>
+
+                    <!-- The Central Equation - Interactive with hover effects -->
+                    <div class="equation-guide" id="equation-guide">
+                        <div class="equation-display-box">
+                            <div class="eq-formula">
+                                <span class="eq-term" data-target="power">
+                                    <span class="eq-symbol">P</span>
+                                    <span class="eq-label">power</span>
+                                </span>
+                                <span class="eq-op">=</span>
+                                <span class="eq-term" data-target="kappa">
+                                    <span class="eq-symbol">κ</span>
+                                    <span class="eq-label">scale</span>
+                                </span>
+                                <span class="eq-op">·</span>
+                                <span class="eq-term" data-target="viewfactor">
+                                    <span class="eq-symbol">ℱ</span>
+                                    <span class="eq-label">model</span>
+                                </span>
+                                <span class="eq-paren">(</span>
+                                <span class="eq-term" data-target="geometry">
+                                    <span class="eq-symbol">a, H</span>
+                                    <span class="eq-label">geometry</span>
+                                </span>
+                                <span class="eq-paren">)</span>
+                                <span class="eq-op">+</span>
+                                <span class="eq-term-static">
+                                    <span class="eq-symbol">ε</span>
+                                    <span class="eq-label">noise</span>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Dynamic connector lines drawn by JavaScript -->
+                        <svg class="equation-connectors-svg" id="connectors-svg"></svg>
+                        
+                        <!-- Step cards aligned below equation symbols - clickable links to sections -->
+                        <div class="equation-steps">
+                            <a href="#interface" class="eq-step-card" data-target="power">
+                                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                                <h4>Power Output</h4>
+                                <p>The simulated power curve (purple) in the chart — this is the prediction target.</p>
+                            </a>
+                            
+                            <a href="#kappa" class="eq-step-card" data-target="kappa">
+                                <div class="card-icon"><i class="fas fa-cog"></i></div>
+                                <h4>κ (Kappa)</h4>
+                                <p>Scaling factor combining cell efficiency η, cell area A, and light intensity I₀.</p>
+                            </a>
+                            
+                            <a href="#models" class="eq-step-card" data-target="viewfactor">
+                                <div class="card-icon"><i class="fas fa-calculator"></i></div>
+                                <h4>View Factor</h4>
+                                <p>Choose <strong>Orientation Aware</strong> or <strong>Parallel Disk</strong> model.</p>
+                            </a>
+                            
+                            <a href="#view-factor" class="eq-step-card" data-target="geometry">
+                                <div class="card-icon"><i class="fas fa-arrows-alt"></i></div>
+                                <h4>Geometry</h4>
+                                <p>Lateral offset (a) and vertical separation (H) from trajectory and light position.</p>
+                            </a>
+                            
+                        </div>
+                    </div>
+                    
+                    <script>
+                    // Interactive equation hover effects and dynamic connector lines
+                    (function() {
+                        const guide = document.getElementById('equation-guide');
+                        if (!guide) return;
+                        
+                        const svg = document.getElementById('connectors-svg');
+                        const terms = guide.querySelectorAll('.eq-term');
+                        const cards = guide.querySelectorAll('.eq-step-card');
+                        
+                        // Color mapping for each target
+                        // Use unified purple color for all connectors
+                        const lineColor = '#71558C';
+                        
+                        // Draw connector lines
+                        function drawConnectors() {
+                            if (!svg) return;
+                            svg.innerHTML = '';
+                            
+                            const guideRect = guide.getBoundingClientRect();
+                            const svgRect = svg.getBoundingClientRect();
+                            
+                            terms.forEach(term => {
+                                const target = term.dataset.target;
+                                const card = guide.querySelector(`.eq-step-card[data-target="${target}"]`);
+                                if (!card) return;
+                                
+                                const termRect = term.getBoundingClientRect();
+                                const cardRect = card.getBoundingClientRect();
+                                
+                                // Calculate positions relative to SVG
+                                const x1 = termRect.left + termRect.width/2 - svgRect.left;
+                                const y1 = 0;
+                                const x2 = cardRect.left + cardRect.width/2 - svgRect.left;
+                                const y2 = svgRect.height;
+                                
+                                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                                line.setAttribute('x1', x1);
+                                line.setAttribute('y1', y1);
+                                line.setAttribute('x2', x2);
+                                line.setAttribute('y2', y2);
+                                line.setAttribute('stroke', lineColor);
+                                line.setAttribute('stroke-width', '2');
+                                line.setAttribute('stroke-dasharray', '4,3');
+                                line.setAttribute('data-target', target);
+                                line.classList.add('connector-line');
+                                svg.appendChild(line);
+                            });
+                        }
+                        
+                        // Hover effects
+                        function highlightTarget(target, active) {
+                            const term = guide.querySelector(`.eq-term[data-target="${target}"]`);
+                            const card = guide.querySelector(`.eq-step-card[data-target="${target}"]`);
+                            const line = svg.querySelector(`.connector-line[data-target="${target}"]`);
+                            
+                            if (term) term.classList.toggle('active', active);
+                            if (card) card.classList.toggle('active', active);
+                            if (line) {
+                                line.setAttribute('stroke-width', active ? '3' : '2');
+                                line.setAttribute('stroke-dasharray', active ? 'none' : '4,3');
+                                line.style.opacity = active ? '1' : '0.6';
+                            }
+                        }
+                        
+                        // Add event listeners
+                        terms.forEach(term => {
+                            term.addEventListener('mouseenter', () => highlightTarget(term.dataset.target, true));
+                            term.addEventListener('mouseleave', () => highlightTarget(term.dataset.target, false));
+                        });
+                        
+                        cards.forEach(card => {
+                            card.addEventListener('mouseenter', () => highlightTarget(card.dataset.target, true));
+                            card.addEventListener('mouseleave', () => highlightTarget(card.dataset.target, false));
+                        });
+                        
+                        // Initial draw and redraw on resize
+                        setTimeout(drawConnectors, 100);
+                        window.addEventListener('resize', drawConnectors);
+                    })();
+                    </script>
+                </section>
+                
+                <!-- ORIGINAL QUICK START (kept for easy revert) -->
+                <!--
+                <section id="quick-start-original" class="help-section">
+                    <h2><i class="fas fa-rocket"></i> Quick Start</h2>
+                    
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Select a Trajectory</h4>
+                                <p>Choose from preloaded trajectories (Circle, One, Two, Three, Triangle) 
+                                   or upload your own motion capture CSV file.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Choose a Radiometric Model</h4>
+                                <p>Select Orientation Aware (accounts for cell tilt) or 
+                                   Parallel Disk (assumes cell always faces the light).</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Adjust Light Position</h4>
+                                <p>Use the X, Y, Z sliders to position the light source. 
+                                   The simulation updates in real-time.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Play the Animation</h4>
+                                <p>Click Play to animate the hand moving through the trajectory. 
+                                   Adjust speed with the slider.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4>Analyze Results</h4>
+                                <p>Compare the real power curve (orange) with the simulated curve (purple) 
+                                   in the chart below the 3D view.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                -->
+
+                <!-- Power Output (Interface Guide) -->
+                <section id="interface" class="help-section">
+                    <h2><i class="fas fa-chart-line"></i> Power Output</h2>
+                    
+                    <figure class="screenshot-figure">
+                        <img src="/SolarSim/assets/solar_track_simulator_UI.jpg" alt="SolarSim Simulator Interface" class="zoomable">
+                        <figcaption>The SolarSim Simulator interface showing the controls panel (left), 3D visualization (center), and power chart (bottom).</figcaption>
+                    </figure>
+                    
+                    <h3>Controls Panel</h3>
+                    <table class="help-table">
+                        <thead>
+                            <tr>
+                                <th>Control</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Trajectory</strong></td>
+                                <td>Select from preloaded trajectorys or choose "Custom" to draw your own</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Upload Motion Capture</strong></td>
+                                <td>Load a CSV file with motion capture data (see <a href="#csv-format">Input Trajectory Format</a>)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Radiometric Model</strong></td>
+                                <td>Choose between Orientation Aware and Parallel Disk models</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Light Position (X, Y, Z)</strong></td>
+                                <td>Adjust the 3D position of the light source in millimeters</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Animation Controls</strong></td>
+                                <td>Play, Pause, and Reset the trajectory animation</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Speed</strong></td>
+                                <td>Adjust animation playback speed (0.1x to 10x)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>3D View</h3>
+                    <ul>
+                        <li><strong>Orbit:</strong> Click and drag to rotate the view</li>
+                        <li><strong>Zoom:</strong> Scroll wheel to zoom in/out</li>
+                        <li><strong>Pan:</strong> Right-click and drag to pan</li>
+                        <li><strong>Trajectory color:</strong> Indicates relative power (dark = low, bright = high)</li>
+                    </ul>
+
+                    <h3>Current State Panel</h3>
+                    <p>
+                        With more than one emitter in the scene, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">a</span></span></span></span>, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span></span></span></span> and
+                        <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord mathnormal">h</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> are reported <strong>relative to the primary emitter</strong>
+                        &mdash; the first one that is enabled. <em>Power</em> is always the total
+                        across every enabled emitter, so it reflects the whole scene rather than
+                        the primary source alone.
+                    </p>
+
+                    <table class="help-table">
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">a</span></span></span></span></td>
+                                <td>Lateral displacement from light source axis (mm)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span></span></span></span></td>
+                                <td>Vertical distance from light source (mm)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></td>
+                                <td>Cell tilt angle relative to light direction (degrees)</td>
+                            </tr>
+                            <tr>
+                                <td>Power</td>
+                                <td>Simulated instantaneous power (µW)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </section>
+
+                <!-- View Factor Models -->
+                <section id="models" class="help-section">
+                    <h2><i class="fas fa-cube"></i> View Factor ℱ</h2>
+                    
+                    <p>The simulator supports two radiometric models for computing the view factor 
+                       between the light source and the solar cell.</p>
+
+                    <figure class="overview-figure">
+                        <img src="/SolarSim/assets/parallel_vs_orientation.png" alt="Comparison of Parallel Disk and Orientation Aware models">
+                        <figcaption>Parallel Disk assumes cell normals <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5944em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathbf">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> always point upward (parallel to emitter normal <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5944em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathbf">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">e</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>), while Orientation Aware accounts for actual cell tilt along the trajectory.</figcaption>
+                    </figure>
+
+                    <div class="model-card">
+                        <h3><i class="fas fa-circle"></i> Parallel Disk Model</h3>
+                        <p>
+                            This simplified model assumes the solar cell is always <strong>parallel</strong> 
+                            to the light source disk (i.e., facing directly upward). It ignores cell tilt.
+                        </p>
+                        
+                        <div class="equation-box collapsible collapsed">
+                            <div class="eq-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                                <span class="eq-title">Parallel View Factor</span>
+                                <i class="fas fa-chevron-down eq-toggle"></i>
+                            </div>
+                            <div class="eq-content">
+                                <span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8201em;"></span><span class="mord katex-accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathcal" style="margin-right:0.0993em;">F</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.5739em;vertical-align:-0.936em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0813em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.4445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6379em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">D</span><span class="mord mtight">/2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.4445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.564em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight" style="margin-right:0.0359em;">π</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4289em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′2</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">2</span><span class="mord mathnormal">a</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6779em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">ϕ</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0813em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">ϕ</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>
+                                <p class="equation-note">
+                                    where <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span></span></span></span> is the vertical separation (cell below lamp, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>), <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">a</span></span></span></span> is the lateral offset, 
+                                    <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span></span></span></span> is the disk diameter, and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1.0019em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">ϕ</span><span class="mclose">)</span></span></span></span> are polar coordinates on the disk.
+                                </p>
+                            </div>
+                        </div>
+
+                        <p class="model-note">
+                            <strong>Best for:</strong> Overhead lighting with minimal hand tilt. 
+                            <strong>Requires:</strong> Position data only (no cell normals needed).
+                        </p>
+                    </div>
+
+                    <div class="model-card">
+                        <h3><i class="fas fa-compass"></i> Orientation Aware Model</h3>
+                        <p>
+                            This model accounts for the <strong>tilt angle</strong> of the solar cell 
+                            relative to the light source. It uses the full radiometric kernel that 
+                            considers both the emitter and receiver orientations.
+                        </p>
+                        
+                        <div class="equation-box collapsible collapsed">
+                            <div class="eq-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                                <span class="eq-title">Orientation Aware View Factor (approximate)</span>
+                                <i class="fas fa-chevron-down eq-toggle"></i>
+                            </div>
+                            <div class="eq-content">
+                                <span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.0993em;">F</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8201em;"></span><span class="mord katex-accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathcal" style="margin-right:0.0993em;">F</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">ˉ</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>
+                                <p class="equation-note">
+                                    where <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8201em;"></span><span class="mord katex-accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8201em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathcal" style="margin-right:0.0993em;">F</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1389em;"><span class="mord">ˉ</span></span></span></span></span></span></span></span></span></span> is the parallel disk view factor (Eq. A.5)
+                                    and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the angle between the cell normal and the direction to the light.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="equation-box collapsible collapsed">
+                            <div class="eq-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                                <span class="eq-title">Orientation Aware View Factor (exact)</span>
+                                <i class="fas fa-chevron-down eq-toggle"></i>
+                            </div>
+                            <div class="eq-content">
+                                <span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.0993em;">F</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.5739em;vertical-align:-0.936em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.4445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6379em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">D</span><span class="mord mtight">/2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.4445em;position:relative;top:-0.0011em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.564em;"><span style="top:-1.7881em;margin-left:-0.4445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span><span style="top:-3.8129em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight" style="margin-right:0.0359em;">π</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">∥</span><span class="mord mathbf">R</span><span class="mord"><span class="mord">∥</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord mathbf">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathbf">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">e</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mopen">(</span><span class="mord">−</span><span class="mord mathbf">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathbf">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">ϕ</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>
+                                <p class="equation-note">
+                                    Full disk integration over the emitter disk of diameter <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span></span></span></span>, where <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6861em;"></span><span class="mord mathbf">R</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathbf">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathbf">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span> is the 
+                                    vector from emitter patch <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathbf">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span> to cell <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4444em;"></span><span class="mord mathbf">x</span></span></span></span>, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5944em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathbf">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">e</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the emitter normal, 
+                                    and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5944em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathbf">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the cell normal.
+                                </p>
+                            </div>
+                        </div>
+
+                        <p class="model-note">
+                            <strong>Best for:</strong> Tilted or rotating cells where orientation matters. 
+                            <strong>Requires:</strong> Position + cell normal vectors.
+                        </p>
+                        <p class="model-note">
+                            <i class="fas fa-cog"></i> To switch between approximate and exact modes, 
+                            see <a href="#advanced">Advanced Settings</a>.
+                        </p>
+                    </div>
+
+                    <figure class="model-comparison-figure" id="model-comparison-screenshot" style="scroll-margin-top: 100px;">
+                        <img src="/SolarSim/assets/orientation_vs_parallel_smple.png" alt="Power curve comparison between Orientation Aware and Parallel Disk models" class="zoomable">
+                        <figcaption>Triangle trajectory: Orientation Aware (left) captures tilt-induced variations with higher R², while Parallel Disk (right) produces a smoother curve that misses these details.</figcaption>
+                    </figure>
+                </section>
+
+                <!-- Scale κ (Kappa Parameter) -->
+                <section id="kappa" class="help-section">
+                    <h2><i class="fas fa-sliders-h"></i> Scale κ</h2>
+                    
+                    <p>
+                        The scaling factor <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">κ</span></span></span></span> converts the dimensionless view factor <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.0993em;">F</span></span></span></span> 
+                        into actual power values. It encapsulates all the physical constants and 
+                        calibration factors of the system.
+                    </p>
+
+                    <div class="equation-box collapsible collapsed">
+                        <div class="eq-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                            <span class="eq-title">κ Definition</span>
+                            <i class="fas fa-chevron-down eq-toggle"></i>
+                        </div>
+                        <div class="eq-content">
+                            <span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">κ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6389em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">η</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cell</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>
+                            <p class="equation-note">
+                                where <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">η</span></span></span></span> is the solar cell efficiency, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">cell</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the cell area, 
+                                and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the effective irradiance from the light source.
+                            </p>
+                            <p>
+                                In a multi-emitter scene each source carries its own <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">κ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, because two lamps may differ in intensity or colour temperature while
+                                sharing the same geometry. This simulator fits a <em>single</em> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">κ</span></span></span></span> to the total view factor when scaling against a reference
+                                trace, which is the right choice when the sources share a spectrum and the quantity of interest is trace shape. Fitting per-emitter
+                                <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">κ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> by non-negative least squares is what the <code>pysolarsim</code> package does when calibrating a real environment.
+                            </p>
+                        </div>
+                    </div>
+
+                    <h3>Configuration Options</h3>
+                    
+                    <div class="option-card">
+                        <h4><i class="fas fa-edit"></i> Manual Input</h4>
+                        <p>
+                            Enter a custom <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">κ</span></span></span></span> value directly. Useful when you have a known 
+                            calibration value from prior experiments or want to explore how scaling affects the output.
+                        </p>
+                    </div>
+
+                    <div class="option-card">
+                        <h4><i class="fas fa-flask"></i> Estimate from Physical Parameters</h4>
+                        <p>
+                            Estimate <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">κ</span></span></span></span> from physical properties when actual values are known:
+                        </p>
+                        <ul>
+                            <li><strong>Solar cell efficiency</strong> (typical: 10-25%)</li>
+                            <li><strong>Cell area</strong> in cm²</li>
+                            <li><strong>Light source power</strong> in Watts</li>
+                        </ul>
+                    </div>
+
+                    <div class="option-card">
+                        <h4><i class="fas fa-calculator"></i> Fit from Real Data</h4>
+                        <p>
+                            When <em>measured</em> power data is uploaded alongside trajectory data, 
+                            the simulator can automatically fit <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">κ</span></span></span></span> using least-squares regression:
+                        </p>
+                        <span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">κ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">opt</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.3277em;vertical-align:-1.2777em;"></span><span class="mop">ar<span style="margin-right:0.0139em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-2.4em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">κ</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">min</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.05em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">real</span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.4445em;"></span><span class="mord mathnormal">κ</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.1141em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.0993em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0993em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>
+                        <p class="equation-note">
+                            where <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> indexes over trajectory samples, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">real</span></span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> is the measured power 
+                            at sample <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span>, and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.0993em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0993em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the computed view factor at that position.
+                        </p>
+                        <p>
+                            <strong>Why this option?</strong> This is useful for <em>validating</em> the model against 
+                            experimental data or <em>calibrating</em> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">κ</span></span></span></span> for a specific hardware setup. 
+                            It requires real power measurements, which are not always available in simulation-only workflows.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Advanced Settings -->
+                <section id="advanced" class="help-section">
+                    <h2><i class="fas fa-cog"></i> Advanced Settings</h2>
+                    
+                    <p>Access advanced settings by clicking the <i class="fas fa-cog"></i> gear icon 
+                       in the Controls panel header.</p>
+
+                    <h3>Simulation Method (Orientation Aware)</h3>
+                    <table class="help-table">
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Fast (Approximate)</strong></td>
+                                <td>Point source approximation with <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mop">cos</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> correction</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Exact</strong></td>
+                                <td>Full disk integration using Simpson's rule</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Light Source Properties</h3>
+                    <p>
+                        The simulator supports <strong>up to four emitters</strong> in one scene.
+                        Use <em>Add Emitter</em> in the emitter panel to introduce another source;
+                        each row carries its own geometry, position, orientation and enable toggle,
+                        and each is drawn in a distinct colour in the 3D view.
+                    </p>
+                    <ul>
+                        <li><strong>Shape</strong> &mdash; <em>Circular</em> (desk lamps, downlights,
+                            spotlights) or <em>Rectangular</em> (LED panels, troffers, light strips).
+                            Circular emitters are sized by diameter <code>D</code>; rectangular ones
+                            by width <code>W</code> and length <code>L</code>, all in millimetres.</li>
+                        <li><strong>Position</strong> &mdash; X, Y and Z of the emitter centre, in the
+                            motion-capture coordinate frame.</li>
+                        <li><strong>Tilt / Azimuth</strong> &mdash; orientation of the emitter face.
+                            Tilt 0&deg; points straight down; azimuth rotates the tilt direction.</li>
+                        <li><strong>Enable toggle</strong> &mdash; keeps an emitter in the scene but
+                            out of the sum, which is useful for isolating one source's contribution.</li>
+                    </ul>
+                    <p>
+                        Total power is the <strong>sum of the per-emitter contributions</strong>:
+                        irradiance from independent sources adds linearly at the cell, so adding an
+                        emitter never changes another one's contribution. There is no inter-emitter
+                        occlusion or interreflection in the model. The exported CSV records each
+                        emitter's shape, position, dimensions and orientation in its header.
+                    </p>
+
+                    <ul>
+                        <li><strong>Diameter (mm):</strong> The diameter of the light source disk. 
+                            Default is 100mm. Larger values spread the light over a wider area.</li>
+                    </ul>
+
+                    <h3>Numerical Integration (Exact Mode Only)</h3>
+                    <p>These settings control the Simpson's rule grid for disk integration:</p>
+                    <ul>
+                        <li><strong>Radial divisions (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>):</strong> Number of divisions along the radius (default: 20)</li>
+                        <li><strong>Angular divisions (<span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">ϕ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>):</strong> Number of divisions around the circumference (default: 40)</li>
+                    </ul>
+                    <p class="note">
+                        Higher values increase accuracy but slow down computation. 
+                        Total integration points = <span class="katex"><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">ϕ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>.
+                    </p>
+
+                    <h3>Visualization</h3>
+                    <ul>
+                        <li><strong>Color threshold (samples):</strong> For trajectories with more samples 
+                            than this threshold, the drawing animation uses a uniform color instead of 
+                            power-coded colors for better performance. Default: 4000.</li>
+                    </ul>
+                </section>
+
+                <!-- CSV Format -->
+                <section id="csv-format" class="help-section">
+                    <h2><i class="fas fa-file-csv"></i> Input Trajectory Format</h2>
+                    
+                    <p>
+                        The simulator accepts CSV files with motion capture data. 
+                        Several column naming conventions are supported.
+                    </p>
+
+                    <h3>Supported Formats</h3>
+
+                    <div class="format-card">
+                        <h4>Format 1: Leap Motion Raw</h4>
+                        <p>Direct output from Leap Motion SDK:</p>
+                        <div class="code-block">
+                            <code>time, leap_palm_x, leap_palm_y, leap_palm_z, leap_palm_normal_x, leap_palm_normal_y, leap_palm_normal_z, v_dc, i_dc</code>
+                        </div>
+                    </div>
+
+                    <div class="format-card">
+                        <h4>Format 2: Simplified Leap</h4>
+                        <p>Shortened column names:</p>
+                        <div class="code-block">
+                            <code>timestamp, palm_pos_x, palm_pos_y, palm_pos_z, palm_normal_x, palm_normal_y, palm_normal_z, power</code>
+                        </div>
+                    </div>
+
+                    <div class="format-card">
+                        <h4>Format 3: Generic XYZ</h4>
+                        <p>Minimal format with positions and normals:</p>
+                        <div class="code-block">
+                            <code>x, y, z, nx, ny, nz, power, time</code>
+                        </div>
+                    </div>
+
+                    <h3>Column Descriptions</h3>
+                    <table class="help-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>x, y, z</code> (or variants)</td>
+                                <td><span class="required">Yes</span></td>
+                                <td>Palm/cell position in millimeters</td>
+                            </tr>
+                            <tr>
+                                <td><code>nx, ny, nz</code> (or variants)</td>
+                                <td><span class="optional">Optional</span></td>
+                                <td>Cell normal vector (unit vector). Required for Orientation Aware model.</td>
+                            </tr>
+                            <tr>
+                                <td><code>v_dc</code></td>
+                                <td><span class="optional">Optional</span></td>
+                                <td>Measured voltage (V)</td>
+                            </tr>
+                            <tr>
+                                <td><code>i_dc</code></td>
+                                <td><span class="optional">Optional</span></td>
+                                <td>Measured current (A). Power = v_dc × i_dc</td>
+                            </tr>
+                            <tr>
+                                <td><code>power</code></td>
+                                <td><span class="optional">Optional</span></td>
+                                <td>Direct power measurement (alternative to v_dc/i_dc)</td>
+                            </tr>
+                            <tr>
+                                <td><code>time</code> or <code>timestamp</code></td>
+                                <td><span class="optional">Optional</span></td>
+                                <td>Time stamp for each sample</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Example CSV</h3>
+                    <div class="code-block">
+<pre>time,leap_palm_x,leap_palm_y,leap_palm_z,leap_palm_normal_x,leap_palm_normal_y,leap_palm_normal_z,v_dc,i_dc
+0.00,-45.2,655.8,120.4,0.15,0.92,-0.36,0.48,0.00052
+0.01,-44.8,655.1,121.3,0.14,0.93,-0.35,0.49,0.00051
+0.02,-43.9,654.2,122.1,0.13,0.94,-0.33,0.47,0.00053
+...</pre>
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Notes</h4>
+                        <ul>
+                            <li>All position values should be in <strong>millimeters</strong></li>
+                            <li>Normal vectors should be <strong>unit vectors</strong> (length ≈ 1)</li>
+                            <li>The cell normal points <strong>away from the palm</strong> (opposite to palm normal)</li>
+                            <li>Files are processed entirely in your browser — no data is uploaded to servers</li>
+                        </ul>
+                    </div>
+
+                    <h3>Export Format</h3>
+                    <p>
+                        The file begins with comment lines recording the scene that produced it:
+                        one line per emitter giving its shape, position, dimensions, orientation
+                        and enabled state, so an export can be traced back to an exact
+                        configuration.
+                    </p>
+
+                    <p>When you export simulation results, the CSV contains:</p>
+                    <div class="code-block">
+                        <code>timestamp, simulated_power_W, a_mm, H_mm, theta_deg</code>
+                    </div>
+                    <table class="help-table">
+                        <thead>
+                            <tr>
+                                <th>Column</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>timestamp</code></td>
+                                <td>Time in seconds</td>
+                            </tr>
+                            <tr>
+                                <td><code>simulated_power_W</code></td>
+                                <td>Simulated power output in Watts</td>
+                            </tr>
+                            <tr>
+                                <td><code>a_mm</code></td>
+                                <td>Lateral offset from light source (mm)</td>
+                            </tr>
+                            <tr>
+                                <td><code>H_mm</code></td>
+                                <td>Vertical separation from light source (mm)</td>
+                            </tr>
+                            <tr>
+                                <td><code>theta_deg</code></td>
+                                <td>Cell tilt angle in degrees (Orientation Aware model only)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="note">The export file also includes metadata comments at the top with trajectory name, model type, light position, and κ value if applicable.</p>
+                </section>
+
+                <!-- Citation -->
+                <section id="citation" class="help-section">
+                    <h2><i class="fas fa-quote-left"></i> Citation</h2>
+                    
+                    <p>If you find this work useful, please cite:</p>
+                    <div class="citation-box">
+                        <button class="copy-btn" onclick="copyBibtex()" title="Copy to clipboard">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <div class="bibtex-block">
+<pre id="bibtex-content">@inproceedings{ghalwash2026solarsim,
+  title     = {SolarSim: Physics-Based Simulation of Wearable Solar Harvester Signals for Motion Sensing},
+  author    = {Yasien Ghalwash and Abdelwahed Khamis and Sara Khalifa and Moid Sandhu and Raja Jurdak},
+  booktitle = {Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies},
+  year      = {2026}
+}
+
+@inproceedings{ghalwash2026solartrack,
+  title     = {SolarTrack: Exploring the Continuous Tracking Capabilities of Wearable Solar Harvesters},
+  author    = {Yasien Ghalwash and Abdelwahed Khamis and Moid Sandhu and Sara Khalifa and Raja Jurdak},
+  booktitle = {Proceedings of the 24th IEEE International Conference on Pervasive Computing and Communications (PerCom)},
+  year      = {2026}
+}</pre>
+                        </div>
+                    </div>
+                    <script>
+                    function copyBibtex() {
+                        const bibtex = document.getElementById('bibtex-content').textContent;
+                        navigator.clipboard.writeText(bibtex).then(() => {
+                            const btn = document.querySelector('.copy-btn');
+                            btn.innerHTML = '<i class="fas fa-check"></i>';
+                            btn.classList.add('copied');
+                            setTimeout(() => {
+                                btn.innerHTML = '<i class="fas fa-copy"></i>';
+                                btn.classList.remove('copied');
+                            }, 2000);
+                        });
+                    }
+                    </script>
+                </section>
+
+                <!-- References -->
+                <section id="references" class="help-section">
+                    <h2><i class="fas fa-book"></i> References</h2>
+                    
+                    <ol class="reference-list">
+                        <li id="ref-modest">
+                            Modest, M. F., &amp; Mazumder, S. (2021). <em>Radiative Heat Transfer</em>. 
+                            Academic Press.
+                        </li>
+                        <li id="ref-bergman">
+                            Bergman, T. L., Lavine, A. S., Incropera, F. P., & DeWitt, D. P. (2017). 
+                            <em>Fundamentals of Heat and Mass Transfer</em> (8th ed.). 
+                            Wiley. — Chapter 13: Radiation Exchange Between Surfaces.
+                        </li>
+                    </ol>
+
+                    <h3>Contact</h3>
+                    <p>
+                        For questions or feedback, <a href="https://github.com/solar-track/solar-track.github.io/issues" target="_blank">open an issue on GitHub</a> 
+                        or email <a href="mailto:abdelwahed.khamis@data61.csiro.au">abdelwahed.khamis@data61.csiro.au</a>.
+                    </p>
+                </section>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="help-footer">
+            <p>SolarSim Simulator</p>
+        </footer>
+    </div>
+
+    <!-- Smooth scrolling and active nav highlighting -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.help-section');
+            
+            // Smooth scroll
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    // Only handle internal anchor links, allow external links to work normally
+                    if (href.startsWith('#')) {
+                        e.preventDefault();
+                        const targetId = href.substring(1);
+                        const targetSection = document.getElementById(targetId);
+                        if (targetSection) {
+                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                });
+            });
+            
+            // Active section highlighting
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === '#' + id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.2, rootMargin: '-100px 0px -50% 0px' });
+            
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+
+    <!-- Image Modal -->
+    <div class="image-modal" id="image-modal">
+        <span class="close-hint">Click anywhere to close</span>
+        <img id="modal-img" src="" alt="">
+    </div>
+
+    <script>
+        // Image modal functionality
+        (function() {
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-img');
+            
+            // Get all zoomable images
+            const figures = document.querySelectorAll('img.zoomable');
+            
+            figures.forEach(img => {
+                img.addEventListener('click', function() {
+                    modal.classList.add('active');
+                    modalImg.src = this.src;
+                    modalImg.alt = this.alt;
+                });
+            });
+            
+            // Close modal on click
+            modal.addEventListener('click', function() {
+                modal.classList.remove('active');
+            });
+            
+            // Close on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    modal.classList.remove('active');
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
+
+
